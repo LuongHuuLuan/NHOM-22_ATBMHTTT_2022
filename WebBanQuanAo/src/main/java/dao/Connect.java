@@ -9,7 +9,7 @@ public class Connect {
     private static Connection connection;
 
     private Connect() {
-        String url = "jdbc:mysql://localhost:3306/WEBBANHANG1";
+        String url = "jdbc:mysql://localhost:3306/WEBBANHANG";
         String userName = "root";
         String password = "";
         try {
