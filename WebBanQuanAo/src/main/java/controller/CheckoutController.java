@@ -31,7 +31,7 @@ public class CheckoutController extends HttpServlet {
             }
             request.setAttribute("cartItems", cartItems);
             request.setAttribute("totalPrice", totalPrice);
-            request.setAttribute("fullName", ac.getFirstName()+" "+ac.getLastName());
+            request.setAttribute("fullName", ac.getFirstName() + " " + ac.getLastName());
         }
         request.setAttribute("pageName", "Thanh toán");
         RequestDispatcher rd = request.getRequestDispatcher("/views/web/checkout.jsp");
@@ -50,14 +50,17 @@ public class CheckoutController extends HttpServlet {
         for (CartItem item : cartItemList) {
             thanh_tien += item.getPrice();
         }
-
-        int ma_hoa_don = PaymentDao.createNewPayment(Integer.parseInt(idCart), diaChi, sdt, nguoiNhan, thanh_tien);
-        if (ma_hoa_don > 0) {
-            for (CartItem item : cartItemList) {
-                PaymentDao.addPaymentDetail(ma_hoa_don, item.getIdProduct(), item.getSize(), item.getColor(), item.getQuantity());
-                CartDao.deleteItem(Integer.parseInt(idCart), item.getIdProduct(), item.getSize(), item.getColor());
+        if (cartItemList.isEmpty()) {
+            request.setAttribute("message", "Giỏ hàng rỗng");
+        } else {
+            int ma_hoa_don = PaymentDao.createNewPayment(Integer.parseInt(idCart), diaChi, sdt, nguoiNhan, thanh_tien);
+            if (ma_hoa_don > 0) {
+                for (CartItem item : cartItemList) {
+                    PaymentDao.addPaymentDetail(ma_hoa_don, item.getIdProduct(), item.getSize(), item.getColor(), item.getQuantity());
+                    CartDao.deleteItem(Integer.parseInt(idCart), item.getIdProduct(), item.getSize(), item.getColor());
+                }
+                request.setAttribute("message", "Thanh toán thành công");
             }
-            request.setAttribute("message", "Thanh toán thành công");
         }
         doGet(request, response);
     }

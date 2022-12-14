@@ -30,7 +30,7 @@
                     </div>
                     <!-- layer 3 -->
                     <div class="layer-3">
-                        <a class="min1" href="shop">Mua sắm ngay</a>
+                        <a class="min1" href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">Mua sắm ngay</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     </div>
                     <!-- layer 3 -->
                     <div class="layer-3">
-                        <a class="min1" href="shop">Mua sắm ngay</a>
+                        <a class="min1" href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">Mua sắm ngay</a>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="banner-container banner-box res-btm">
-                        <a href="shop">
+                        <a href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">
                             <img alt="" src='<c:url value="/assets/imgs/banner/r6.png"/>'>
                             <div>
                                 <h2>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="banner-box banner-box-re">
-                        <a href="shop">
+                        <a href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">
                             <img alt="" src='<c:url value="/assets/imgs/banner/4.jpg"/>'>
                             <div>
                                 <h2>
@@ -91,7 +91,7 @@
                         </a>
                     </div>
                     <div class="banner-box res-btm">
-                        <a href="shop">
+                        <a href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">
                             <img alt="" src='<c:url value="/assets/imgs/banner/5.jpg"/>'>
                             <div>
                                 <h2>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="banner-box banner-box-re">
-                        <a href="shop">
+                        <a href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">
                             <img alt="" src='<c:url value="/assets/imgs/banner/2.jpg"/>'>
                             <div>
                                 <h2>
@@ -117,7 +117,7 @@
                         </a>
                     </div>
                     <div class="banner-box">
-                        <a href="shop">
+                        <a href="shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default">
                             <img alt="" src='<c:url value="/assets/imgs/banner/3.jpg"/>'>
                             <div>
                                 <h2>
