@@ -1,10 +1,9 @@
 package api;
 
+import Services.OrderServices;
 import Services.ProductServices;
-import beans.Product;
-import beans.ProductNew;
+import beans.Order;
 import com.google.gson.Gson;
-import dao.ProductDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "ProductAPI", value = "/api/order")
+@WebServlet(name = "OrderAPI", value = "/api/order")
 @MultipartConfig
 public class OrderAPI extends HttpServlet {
     @Override
@@ -25,29 +24,33 @@ public class OrderAPI extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        List<Product> listProductAPI = ProductDao.loadProduct();
+        List<Order> orders = OrderServices.getAll();
         Gson gson = new Gson();
-        String list = gson.toJson(listProductAPI);
+        String ordersToJson = gson.toJson(orders);
         PrintWriter pw = response.getWriter();
-        pw.println(list);
+        pw.println(ordersToJson);
         pw.flush();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String uri = request.getRequestURI();
-        switch (uri) {
-            case "/WebBanQuanAo/update-thumbnail":
-                String codeProduct = request.getParameter("codeProduct");
-                String oldPath = request.getParameter("oldPath");
-                Part filePart = request.getPart("thumbnail");
-                String readPath = request.getServletContext().getRealPath("/assets/imgs/product-imgs");
-                ProductServices.updateThumbnail(codeProduct, filePart, readPath, oldPath);
+        String type = request.getParameter("type");
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        boolean result = false;
+        switch (type) {
+            case "delete":
+                result = OrderServices.deleteOrder(orderID);
                 break;
-
+            case "updateStatus":
+                String status = request.getParameter("status");
+                result = OrderServices.updateStatus(orderID, status);
+                break;
             default:
                 break;
         }
+        PrintWriter pw = response.getWriter();
+        pw.println(result);
+        pw.flush();
     }
 }

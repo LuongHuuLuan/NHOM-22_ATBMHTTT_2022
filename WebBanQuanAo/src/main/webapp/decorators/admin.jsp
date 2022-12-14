@@ -38,6 +38,42 @@
 
     <%--    style customizr--%>
     <link rel="stylesheet" type="text/css" href='<c:url value="/admin/css/customize.css"/>'/>
+    <style>
+        #orders .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px;
+            border-top: 2px solid #747474;
+        }
+
+        #orders .order-image {
+            padding: 16px;
+        }
+
+        #orders .order-image p {
+            text-align: center;
+            color: #747474;
+        }
+
+        #orders .order-product-name {
+            margin: auto;
+            flex-grow: 1;
+            color: #747474;
+        }
+
+        #orders .order-image img {
+            width: 100px;
+        }
+
+        #orders .order-details {
+            color: #747474;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+    </style>
 
     <!-- ace settings handler -->
     <script src="<c:url value='/admin/js/ace-extra.min.js'/>"></script>

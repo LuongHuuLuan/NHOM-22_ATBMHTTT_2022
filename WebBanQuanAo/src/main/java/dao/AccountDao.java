@@ -91,6 +91,44 @@ public class AccountDao {
         return usernames.isEmpty() ? null : usernames.get(0);
     }
 
+    public static Account getAccount(int accountID) {
+        Connection connection = Connect.getInstance().getConnection();
+        try {
+            String query = "SELECT * FROM TAIKHOAN WHERE MA_TK = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, accountID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Account account = new Account();
+            while (resultSet.next()) {
+                String lastName = resultSet.getString("HO");
+                String firstName = resultSet.getString("TEN");
+                String phone = resultSet.getString("SDT");
+                String email = resultSet.getString("EMAIL");
+                String address = resultSet.getString("HO");
+                String userName = resultSet.getString("TEN_TK");
+                String passWord = resultSet.getString("MAT_KHAU");
+                Timestamp registerDate = resultSet.getTimestamp("NGAY_DK");
+                String role = resultSet.getString("MA_VAI_TRO");
+                account.setUserID(accountID);
+                account.setLastName(lastName);
+                account.setFirstName(firstName);
+                account.setPhoneNumber(phone);
+                account.setEmail(email);
+                account.setAddress(address);
+                account.setUserName(userName);
+                account.setPassWord(passWord);
+                account.setDateRegister(registerDate);
+                account.setRole(role);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            return account;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getEmail(String email) {
         Connection connection = Connect.getInstance().getConnection();
         List<String> emails = new ArrayList<>();
@@ -171,7 +209,7 @@ public class AccountDao {
         return null;
     }
 
-    public static List<Account> getListUser(){
+    public static List<Account> getListUser() {
         List<Account> accounts = new ArrayList<>();
         Connection connection = Connect.getInstance().getConnection();
         try {
@@ -206,6 +244,7 @@ public class AccountDao {
         }
         return accounts;
     }
+
     public static boolean addAccount(String lastName, String firstName, String phoneNumber, String email, String
             nameAccount, String password) {
         Connection connection = Connect.getInstance().getConnection();
@@ -248,7 +287,7 @@ public class AccountDao {
             prep.setInt(1, Integer.parseInt(id));
             int res2 = prep.executeUpdate();
             prep.close();
-            return (res1+res2) == 2;
+            return (res1 + res2) == 2;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -318,4 +357,6 @@ public class AccountDao {
         }
         return false;
     }
+
+
 }

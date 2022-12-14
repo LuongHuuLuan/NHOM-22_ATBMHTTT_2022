@@ -1,46 +1,52 @@
 $(document).ready(function () {
     $.ajax({
-        url: `http://localhost:8080${$path_base}/api-get-user`,
+        url: `http://localhost:8080${$path_base}/api/order`,
         type: 'GET',
-        dataType: 'text',
+        dataType: 'json',
         success(values) {
-            // const json = JSON.parse(d);
-            const usersData = JSON.parse(values).map((x) => {
+            const orders = values.map(order => {
                 return [
-                    x.userID,
-                    x.firstName,
-                    x.lastName,
-                    x.phoneNumber,
-                    x.email,
-                    x.address === undefined ? "" : x.address,
-                    x.userName,
-                    x.role
+                    order.orderID,
+                    order.account.userName,
+                    order.address,
+                    order.phone,
+                    order.receiver,
+                    order.date,
+                    order.price,
+                    order.status,
+                    order.orderItems
                 ]
             })
-            // dataSet = data;
-            console.log(usersData)
-            $('#table-user').DataTable({
-                data: usersData,
+            $('#table-order').DataTable({
+                data: orders,
                 columns: [
-                    {title: 'Mã TK'},
-                    {title: 'Họ'},
-                    {title: 'Tên'},
+                    {title: 'Mã HD'},
+                    {title: 'TK đặt hàng'},
+                    {title: 'Địa chỉ GH'},
                     {title: 'Số điện thoại'},
-                    {title: 'Email'},
-                    {title: 'Địa chỉ'},
-                    {title: 'Tên tài khoản'},
-                    {title: 'Vai trò'},
+                    {title: 'Người nhận'},
+                    {title: 'Ngày đặt'},
+                    {title: 'Thành tiền'},
                     {
-                        title: '',
-                        render: function () {
-                            return "<button onclick='edit(this)' name='Edit' value=''>edit</button>";
+                        title: 'Trạng thái',
+                        render: function (status) {
+                            return `<select onchange='updateStatus(this)'>
+                                <option value='CHOGIAOHANG' ${status === 'CHOGIAOHANG' ? "selected" : ""}>Chờ giao hàng</option>
+                                <option value='HOANTHANH' ${status === 'HOANTHANH' ? "selected" : ""}>Hoàn thành</option>
+                                <option value='HUY' ${status === 'HUY' ? "selected" : ""}>Hủy</option>
+                                </select>`;
                         }
                     },
                     {
                         title: '',
                         render: function () {
-                            // return "<button class ='my-btn' onclick = deleteAccount(this)>delete</button>";
-                            return '<button type="button" class="my-btn" data-toggle="modal" onclick="setDeleteElement(this)" data-target="#confirm-delete-account">delete</button>'
+                            return "<button onclick='more(this)' name='more'  data-toggle='modal' data-target='#orders'>more</button>";
+                        }
+                    },
+                    {
+                        title: '',
+                        render: function () {
+                            return '<button type="button" class="my-btn" data-toggle="modal" onclick="setDeleteElement(this)" data-target="#confirm-delete-order">delete</button>'
                         }
                     },
                 ],
@@ -51,67 +57,79 @@ $(document).ready(function () {
 
 });
 
-// Xử lí sự kiện xóa tài khoản
-// function deleteAccount(thisElement) {
-//     let table = $('#table-user').DataTable();
-//     const data = table.row($(thisElement).parents('tr')).data();
-//     const idAccount = data[0];
-//
-//     $.ajax({
-//         type: 'GET',
-//         url: `http://localhost:8080${$path_base}/api-delete-account`,
-//         dataType: 'text',
-//         data: {'id_account': idAccount},
-//         success: function (data) {
-//             $("#message_box").fadeTo(2000, 500).slideUp(500, function () {
-//                 $("#message_box").slideUp(500);
-//             });
-//             $("#msg_box").html(data);
-//             let myTable = $('#table-user').DataTable();
-//             myTable.row($(thisElement).parents('tr')).remove().draw();
-//         }
-//     });
-// }
+function more(element) {
+    let table = $('#table-order').DataTable();
+    const data = table.row($(element).parents('tr')).data();
+    const orderItems = data[8];
+    let modal = $('#orders .modal-body');
+    const renderItem = orderItems.map(item => {
+        return `<div class="order-item">
+            <div class="order-image">
+                <p>Mã: ${item.product.id}</p>
+                <img src="${$path_base + item.product.thumbnail}">
+            </div>
+            <div class="order-product-name">
+                <p>${item.product.name}</p>
+            </div>
+            <div class="order-details">
+                <p>SIZE: ${item.size}</p>
+                <p>Màu: ${item.color}</p>
+                <p>Số Lượng: x${item.amount}</p>
+            </div>
+        </div>`;
+    });
+    modal.html(renderItem.join("\n"));
+
+}
+
 let deleteElement = null;
 
 function setDeleteElement(thisElement) {
     deleteElement = thisElement;
-    console.log(deleteElement);
 }
 
-function deleteAccount() {
-    let table = $('#table-user').DataTable();
+function deleteOrder() {
+    let table = $('#table-order').DataTable();
     const data = table.row($(deleteElement).parents('tr')).data();
-    const idAccount = data[0];
+    const idOrder = data[0];
     $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080${$path_base}/api-delete-account`,
-        dataType: 'text',
-        data: {'id_account': idAccount},
+        type: 'POST',
+        url: `${$path_base}/api/order`,
+        dataType: 'json',
+        data: {
+            'type': 'delete',
+            'orderID': idOrder
+        },
         success: function (data) {
             $("#message_box").fadeTo(2000, 500).slideUp(500, function () {
                 $("#message_box").slideUp(500);
             });
-            $("#msg_box").html(data);
-            let myTable = $('#table-user').DataTable();
-            myTable.row($(deleteElement).parents('tr')).remove().draw();
+            if (data === true) {
+                $("#msg_box").html("Xóa hóa đơn thành công");
+                let myTable = $('#table-order').DataTable();
+                myTable.row($(deleteElement).parents('tr')).remove().draw();
+            } else {
+                $("#msg_box").html("Xóa hóa đơn thất bại");
+            }
         }
     });
-    $("#confirm-delete-account").modal("hide");
+    $("#confirm-delete-order").modal("hide");
 }
 
-function edit(thisElement) {
-    let table = $('#table-user').DataTable();
-    const data = table.row($(thisElement).parents('tr')).data();
-
-    $('#idAccount').val(data[0]);
-    $('#last_name_edit').val(data[1]);
-    $('#first_name_edit').val(data[2]);
-    $('#phone_edit').val(data[3]);
-    $('#email_edit').val(data[4]);
-    $('#address_edit').val(data[5]);
-    $('#username_edit').val(data[6]);
-    $('#role_edit').val(data[7]).change();
-    $('#editUser').modal('show');
+function updateStatus(element) {
+    let table = $('#table-order').DataTable();
+    const data = table.row($(element).parents('tr')).data();
+    const idOrder = data[0];
+    const status = data[7];
+    $.ajax({
+        type: 'POST',
+        url: `${$path_base}/api/order`,
+        dataType: 'json',
+        data: {
+            'type': 'updateStatus',
+            'orderID': idOrder,
+            'status': $(element).val()
+        }
+    });
 }
 
