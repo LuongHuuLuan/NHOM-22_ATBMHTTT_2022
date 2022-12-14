@@ -17,17 +17,14 @@
                                     <li>
                                         <i class="pe-7s-map-marker"></i>
                                         <p>MyStore, 772 Đường Điện Biên Phủ, Phường 1</p>
-                                        <p class="rs">Quận Bình Thạnh, Thành Phố Hồ Chí Minh</p>
                                     </li>
                                     <li>
                                         <i class="pe-7s-call"></i>
                                         <p>0310230112</p>
-                                        <p>0807090805</p>
                                     </li>
                                     <li>
                                         <i class="pe-7s-mail-open"></i>
                                         <p>myStore@fashion.com</p>
-                                        <p>myStore@outlook.com</p>
                                     </li>
                                 </ul>
                             </div>
@@ -41,11 +38,8 @@
                             </div>
                             <div class="footer-menu">
                                 <ul>
-                                    <li><a href="login.html">Tài Khoản</a></li>
-                                    <li><a href="wishlist.html">Sản Phẩm Yêu Thích</a></li>
-                                    <li><a href="order-complete">Đơn Hàng</a></li>
-                                    <li><a href="#">Thẻ Tín Dụng</a></li>
-                                    <li class="nm"><a href="#">Địa Chỉ</a></li>
+                                    <li><a href="my-account">Tài Khoản</a></li>
+                                    <li><a href="shopping-cart">Giỏ hàng</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -58,11 +52,7 @@
                             </div>
                             <div class="footer-menu">
                                 <ul>
-                                    <li><a href="contact.html">Liên Hệ Chúng Tôi</a></li>
-                                    <li><a href="#">Đổi Trả</a></li>
-                                    <li><a href="#">Thương Hiệu</a></li>
-                                    <li><a href="#">Chỉ Đường</a></li>
-                                    <li class="nm"><a href="#">Phiếu quà tặng</a></li>
+                                    <li><a href="contact">Liên Hệ Chúng Tôi</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -74,11 +64,16 @@
                                 <hr class="dubble-border"/>
                             </div>
                             <div class="footer-text">
-                                <p>Đăng kí để nhận những tin tức mới nhất từ của hàng.</p>
-                                <form action="https://preview.hasthemes.com/tasnm-preview/tasnm/mail.php" method="post">
-                                    <input type="text" name="email" placeholder="Nhập email của bạn"/>
-                                    <input type="submit" value="ĐĂNG KÝ"/>
-                                </form>
+                                <p>Đăng ký để nhận những tin tức mới nhất từ của hàng.</p>
+                                <%--                                <form action="https://preview.hasthemes.com/tasnm-preview/tasnm/mail.php" method="post">--%>
+                                <%--                                    <input type="text" name="email" placeholder="Nhập email của bạn"/>--%>
+                                <%--                                    <input type="submit" value="ĐĂNG KÝ"/>--%>
+                                <%--                                </form>--%>
+                                <div class="footer-menu">
+                                    <ul>
+                                        <li><a href="register">Đăng ký ngay</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -116,17 +111,5 @@
             </div>
         </div>
     </div>
-    <!-- footer-top area end -->
-    <!-- footer-bottom area start -->
-    <%--    <div class="footer-bottom">--%>
-    <%--        <div class="container">--%>
-    <%--            <div class="row">--%>
-    <%--                <div class="col-xs-12 text-center">--%>
-    <%--                    <p>&copy; 2016 Devitems. All Rights Reserved.</p>--%>
-    <%--                </div>--%>
-    <%--            </div>--%>
-    <%--        </div>--%>
-    <%--    </div>--%>
-    <!-- footer-bottom area end -->
 </footer>
 <!-- footer section end -->

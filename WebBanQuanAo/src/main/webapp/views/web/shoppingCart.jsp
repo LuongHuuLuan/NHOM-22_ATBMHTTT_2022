@@ -117,7 +117,7 @@
                     </div>
                     <div class="wc-proceed-to-checkout">
                         <p class="return-to-shop">
-                            <a class="button wc-backward" href="<c:url value='/shop?page=1'/>">Tiếp tục mua sắm</a>
+                            <a class="button wc-backward" href="<c:url value='shop?type=all&brand=all&color=all&numOfProducts=9&page=1&sort=default'/>">Tiếp tục mua sắm</a>
                         </p>
                         <p class="wc-proceed-to-checkout">
                             <a class="wc-forward" href="<c:url value='/checkout'/>">Xác nhận thanh toán</a>
