@@ -11,7 +11,6 @@
             <div class="alert alert-success" id="message_box" style="width: 25vw;">
                 <button type="button" class="close" data-dismiss="alert">x</button>
                 <strong id="msg_box">${requestScope.message}</strong>
-
             </div>
         </div>
     </div>
@@ -40,15 +39,12 @@
                 <h1 class="pull-left">
                     Tài khoản
                 </h1>
-                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addUser">
-                    Thêm tài khoản
-                </button>
             </div><!-- /.page-header -->
 
             <div class="row">
                 <div class="col-xs-12">
 
-                    <table id="table-user"></table>
+                    <table id="table-order"></table>
 
                     <script type="text/javascript">
                         var $path_base = "${requestScope.base}";//in Ace demo this will be used for editurl parameter
@@ -61,94 +57,45 @@
 </div><!-- /.main-content -->
 
 <%--popup đăng ký user--%>
-<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUserLabel"
+<div class="modal fade" id="orders" tabindex="-1" role="dialog" aria-labelledby="orders"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thêm tài khoản</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Chi tiết hóa đơn</h5>
                 <button style="margin-top: -25px !important;" type="button" class="close" data-dismiss="modal"
                         aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-add-user" method="post" action="admin-user-manage">
-                    <div class="form-group">
-                        <label for="last_name">Họ</label>
-                        <input type="text" class="form-control" name="last-name" id="last_name"
-                               placeholder="Nhập họ của bạn">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="first_name">Tên</label>
-                        <input type="text" class="form-control" name="first-name" id="first_name"
-                               placeholder="Nhập tên của bạn">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại</label>
-                        <input type="text" class="form-control" name="phone" id="phone"
-                               placeholder="Nhập số điện thoại">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Địa chỉ email</label>
-                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp"
-                               placeholder="Nhập email">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Tên tài khoản</label>
-                        <input type="text" class="form-control" name="username" id="username"
-                               placeholder="Nhập tên tài khoản">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Mật khẩu</label>
-                        <input type="password" class="form-control" name="password" id="password"
-                               placeholder="Nhập mật khẩu">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="repeat_password">Nhập lại mật khẩu</label>
-                        <input type="password" class="form-control" name="password-repeat" id="repeat_password"
-                               placeholder="Nhập lại mật khẩu">
-                        <p class="form-text text-danger text-muted form-error"></p>
-                    </div>
-
-                    <input type="hidden" name="action" value="delete">
-                </form>
             </div>
+        </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="submit" id="submit-form" form="form-add-user" class="btn btn-primary">Thêm</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="confirm-delete-account" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-account"
+<div class="modal fade" id="confirm-delete-order" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-order"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Bạn chắc chắn muốn xóa?</h5>
-                <button type="button" style="margin-top: -25px !important;"  class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title">Bạn chắc chắn xóa hóa đơn?</h5>
+                <button type="button" style="margin-top: -25px !important;" class="close" data-dismiss="modal"
+                        aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Chọn Ok để xóa tài khoản
+                Chọn Ok để xóa hóa đơn
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="deleteAccount()">OK</button>
+                <button type="button" class="btn btn-primary" onclick="deleteOrder()">OK</button>
             </div>
         </div>
     </div>
@@ -199,7 +146,8 @@
 
                     <div class="form-group">
                         <label for="email_edit">Địa chỉ email</label>
-                        <input type="email" class="form-control" name="email" id="email_edit" aria-describedby="emailHelp"
+                        <input type="email" class="form-control" name="email" id="email_edit"
+                               aria-describedby="emailHelp"
                                placeholder="Nhập email">
                         <p class="form-text text-danger text-muted form-error"></p>
                     </div>
@@ -224,7 +172,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="submit" id="update-account" form="form-edit-user" class="btn btn-primary">Cập nhật</button>
+                <button type="submit" id="update-account" form="form-edit-user" class="btn btn-primary">Cập nhật
+                </button>
             </div>
         </div>
     </div>
