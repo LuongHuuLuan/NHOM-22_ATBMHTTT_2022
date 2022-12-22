@@ -31,7 +31,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-public class CreateDigitalSignatureScreen extends JFrame {
+public class CreateDigitalSignatureScreen extends JPanel {
 	private Key key = new Key();
 	private RSA rsa = new RSA();
 	private Hash hash = new Hash("SHA-256");
@@ -64,20 +64,23 @@ public class CreateDigitalSignatureScreen extends JFrame {
 	 * Create the frame.
 	 */
 	public CreateDigitalSignatureScreen() {
-		setTitle("Tạo chữ kí điện tử");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setTitle("Tạo chữ kí điện tử");
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setBounds(100, 100, 978, 599);
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLayout(null);
 		setBounds(100, 100, 978, 599);
-		contentPane = new JPanel();
-		contentPane.setBackground(SystemColor.window);
+//		contentPane = new JPanel();
+		setBackground(SystemColor.window);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+//		setContentPane(contentPane);
+//		setLayout(null);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(new Color(174, 186, 198));
 		panel.setBounds(0, 0, 964, 75);
-		contentPane.add(panel);
+		add(panel);
 
 		JLabel lblNewLabel = new JLabel("Logo School here");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -101,7 +104,7 @@ public class CreateDigitalSignatureScreen extends JFrame {
 				TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI Light", Font.BOLD, 16),
 				new Color(179, 179, 179)));
 		panel_1.setBounds(32, 95, 438, 442);
-		contentPane.add(panel_1);
+		add(panel_1);
 		panel_1.setLayout(null);
 
 		JLabel lblNewLabel_2 = new JLabel("Độ dài Key");
@@ -199,7 +202,7 @@ public class CreateDigitalSignatureScreen extends JFrame {
 				new Font("Segoe UI Light", Font.BOLD, 16), new Color(179, 179, 179)));
 		panel_1_1.setBackground(Color.WHITE);
 		panel_1_1.setBounds(480, 95, 458, 442);
-		contentPane.add(panel_1_1);
+		add(panel_1_1);
 
 		JLabel lblNewLabel_4 = new JLabel("User Name");
 		lblNewLabel_4.setFont(new Font("Times New Roman", Font.PLAIN, 18));

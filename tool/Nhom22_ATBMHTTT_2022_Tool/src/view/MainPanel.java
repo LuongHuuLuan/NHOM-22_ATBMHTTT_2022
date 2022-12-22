@@ -38,7 +38,9 @@ public class MainPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moveScreen(new CreateSignatureScreen());
+//				moveScreen(new CreateSignatureScreen());
+//				new CreateDigitalSignatureScreen();
+				moveScreen(new CreateDigitalSignatureScreen());
 			}
 		});
 
