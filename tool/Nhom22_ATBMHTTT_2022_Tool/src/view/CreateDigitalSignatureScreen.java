@@ -243,7 +243,11 @@ public class CreateDigitalSignatureScreen extends JPanel {
 		JButton btnNewButton = new JButton("Trở về");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				JFrame jF = (JFrame) getTopLevelAncestor();
+				jF.getContentPane().removeAll();
+				jF.setContentPane(new MainPanel());
+				jF.getContentPane().revalidate();
+				jF.getContentPane().repaint();
 			}
 		});
 		btnNewButton.setFocusPainted(false);

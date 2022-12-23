@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class MainPanel extends JPanel {
-
 	/**
 	 * Create the panel.
 	 */
@@ -32,14 +31,12 @@ public class MainPanel extends JPanel {
 		btnGenerateSignature.setFocusPainted(false);
 		btnGenerateSignature.setBackground(new Color(130, 204, 221));
 		btnGenerateSignature.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		btnGenerateSignature.setBounds(80, 251, 177, 46);
+		btnGenerateSignature.setBounds(245, 251, 177, 46);
 		add(btnGenerateSignature);
 		btnGenerateSignature.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				moveScreen(new CreateSignatureScreen());
-//				new CreateDigitalSignatureScreen();
 				moveScreen(new CreateDigitalSignatureScreen());
 			}
 		});
@@ -49,15 +46,21 @@ public class MainPanel extends JPanel {
 		btnSignPdf.setFocusPainted(false);
 		btnSignPdf.setBackground(new Color(0, 210, 211));
 		btnSignPdf.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		btnSignPdf.setBounds(521, 251, 153, 46);
+		btnSignPdf.setBounds(582, 251, 153, 46);
 		add(btnSignPdf);
+		btnSignPdf.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveScreen(new SignPDFScreen());
+			}
+		});
 
 		JButton btnExit = new JButton("Thoát");
 		btnExit.setForeground(SystemColor.desktop);
 		btnExit.setFocusPainted(false);
 		btnExit.setBackground(new Color(229, 80, 57));
 		btnExit.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		btnExit.setBounds(739, 469, 147, 46);
+		btnExit.setBounds(588, 469, 147, 46);
 		add(btnExit);
 
 		JButton btnHngDnS = new JButton("Hướng dẫn");
@@ -65,7 +68,7 @@ public class MainPanel extends JPanel {
 		btnHngDnS.setFocusPainted(false);
 		btnHngDnS.setBackground(new Color(120, 224, 143));
 		btnHngDnS.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		btnHngDnS.setBounds(520, 469, 136, 46);
+		btnHngDnS.setBounds(244, 469, 178, 46);
 		add(btnHngDnS);
 
 		JPanel panel = new JPanel();
@@ -88,14 +91,6 @@ public class MainPanel extends JPanel {
 		lblNewLabel_1_1.setFont(new Font("Segoe UI Light", Font.BOLD, 22));
 		lblNewLabel_1_1.setBounds(121, 37, 660, 30);
 		panel.add(lblNewLabel_1_1);
-
-		JButton btnXutThngTin = new JButton("Xuất thông tin chữ ký");
-		btnXutThngTin.setForeground(SystemColor.desktop);
-		btnXutThngTin.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		btnXutThngTin.setFocusPainted(false);
-		btnXutThngTin.setBackground(new Color(130, 204, 221));
-		btnXutThngTin.setBounds(715, 251, 202, 46);
-		add(btnXutThngTin);
 	}
 
 	void moveScreen(JPanel panelFoward) {
@@ -105,4 +100,5 @@ public class MainPanel extends JPanel {
 		jF.getContentPane().revalidate();
 		jF.getContentPane().repaint();
 	}
+
 }
