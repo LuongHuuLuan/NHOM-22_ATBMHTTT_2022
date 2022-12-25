@@ -55,9 +55,9 @@ public class Support {
 			json.put("email", hash.hash(email.getText().trim()));
 			json.put("phone", hash.hash(phone.getText().trim()));
 			if (typeKey.equalsIgnoreCase("PUBLIC_KEY")) {
-				json.put("publicKey", hash.hash(key.getText().trim()));
+				json.put("publicKey", key.getText().trim());
 			} else if (typeKey.equalsIgnoreCase("PRIVATE_KEY")) {
-				json.put("privateKey", hash.hash(key.getText().trim()));
+				json.put("privateKey", key.getText().trim());
 			}
 //			json.put("phone", List.of("Mountain View", "Los Angeles", "New York"));
 		} catch (JSONException e) {
