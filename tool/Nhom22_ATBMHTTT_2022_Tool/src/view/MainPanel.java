@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -62,6 +63,14 @@ public class MainPanel extends JPanel {
 		btnExit.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnExit.setBounds(588, 469, 147, 46);
 		add(btnExit);
+		btnExit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exitApp();
+				
+			}
+		});
 
 		JButton btnHngDnS = new JButton("Hướng dẫn");
 		btnHngDnS.setForeground(SystemColor.desktop);
@@ -70,6 +79,13 @@ public class MainPanel extends JPanel {
 		btnHngDnS.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnHngDnS.setBounds(244, 469, 178, 46);
 		add(btnHngDnS);
+		btnHngDnS.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveScreen(new TutorialScreen());
+			}
+		});
 
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -99,6 +115,10 @@ public class MainPanel extends JPanel {
 		jF.setContentPane(panelFoward);
 		jF.getContentPane().revalidate();
 		jF.getContentPane().repaint();
+	}
+	void exitApp() {
+		JFrame jF = (JFrame) getTopLevelAncestor();
+		jF.dispatchEvent(new WindowEvent(jF, WindowEvent.WINDOW_CLOSING));
 	}
 
 }

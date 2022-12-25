@@ -19,6 +19,7 @@ public class SignPDFScreen extends JPanel {
 	private JLabel lblNewLabel_1;
 	private final String LOAD_PDF = "LOAD_PDF";
 	private final String LOAD_SIGN = "LOAD_SIGN";
+	private final String SAVE_FILE_SIGN = "SAVE_FILE_SIGN";
 	private String pathPDF;
 	private String pathSign;
 
@@ -67,10 +68,21 @@ public class SignPDFScreen extends JPanel {
 		lblNewLabel_1 = new JLabel("Chưa có file nào được chọn");
 		lblNewLabel_1.setBounds(381, 157, 373, 14);
 		add(lblNewLabel_1);
-		
+
 		JButton btnNewButton_2 = new JButton("Ký lên văn bản");
-		btnNewButton_2.setBounds(521, 511, 164, 23);
+		btnNewButton_2.setBounds(355, 511, 164, 23);
 		add(btnNewButton_2);
+
+		JButton btnNewButton_2_1 = new JButton("Lưu văn bản đã ký");
+		btnNewButton_2_1.setBounds(546, 511, 164, 23);
+		add(btnNewButton_2_1);
+		btnNewButton_2_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveFile();
+			}
+		});
 		btnNewButton_2.addActionListener(new ActionListener() {
 
 			@Override
@@ -88,6 +100,8 @@ public class SignPDFScreen extends JPanel {
 
 	}
 
+	// load file PDF or file attachment
+	// input: type action file need load
 	void loadFile(String type) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.showOpenDialog(this);
@@ -107,8 +121,22 @@ public class SignPDFScreen extends JPanel {
 		}
 	}
 
+	// save file after signed
+	void saveFile() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.showSaveDialog(this);
+		String path = fileChooser.getCurrentDirectory() + "\\" + fileChooser.getSelectedFile().getName();
+		String message = SignFileService.getInstance().saveFileSign(path);
+		JOptionPane.showMessageDialog(this, message);
+	}
+
+	// sign on file PDF (attachment a file)
 	void sign() {
-		SignFileService.getInstance().sign(pathPDF, pathSign);
-		JOptionPane.showMessageDialog(this, "Đã ký thành công");
+		if (pathPDF == null || pathSign == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn đầy đủ");
+		} else {
+			SignFileService.getInstance().sign(pathPDF, pathSign);
+			JOptionPane.showMessageDialog(this, "Đã ký thành công");
+		}
 	}
 }
