@@ -20,7 +20,7 @@ public class OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 int orderID = resultSet.getInt("MA_HOA_DON");
-                Account account = AccountDao.getAccount(resultSet.getInt("MA_TK"));
+                Account account = AccountDao.findOneById(resultSet.getInt("MA_TK"));
                 String address = resultSet.getString("DIA_CHI_GH");
                 String phone = resultSet.getString("SDT");
                 String receiver = resultSet.getString("NGUOI_NHAN");
@@ -56,7 +56,7 @@ public class OrderDao {
             while (resultSet.next()) {
                 Order order = new Order();
                 int orderID = resultSet.getInt("MA_HOA_DON");
-                Account account = AccountDao.getAccount(resultSet.getInt("MA_TK"));
+                Account account = AccountDao.findOneById(resultSet.getInt("MA_TK"));
                 String address = resultSet.getString("DIA_CHI_GH");
                 String phone = resultSet.getString("SDT");
                 String receiver = resultSet.getString("NGUOI_NHAN");

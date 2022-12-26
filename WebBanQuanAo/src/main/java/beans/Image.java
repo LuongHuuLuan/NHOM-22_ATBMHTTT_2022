@@ -1,31 +1,31 @@
 package beans;
 
 public class Image {
-    private String idProduct;
-    private String colorName;
-    private String pathImg;
+    private Product product;
+    private Color color;
+    private String url;
 
-    public String getIdProduct() {
-        return idProduct;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setIdProduct(String idProduct) {
-        this.idProduct = idProduct;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getColorName() {
-        return colorName;
+    public Color getColor() {
+        return color;
     }
 
-    public void setColorName(String colorName) {
-        this.colorName = colorName;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
-    public String getPathImg() {
-        return pathImg;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPathImg(String pathImg) {
-        this.pathImg = pathImg;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

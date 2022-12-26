@@ -17,7 +17,7 @@ public class dashBoardController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        if (account == null || !(account.getRole().equals("ADMIN"))) {
+        if (account == null || !(account.getRole().getName().equals("ADMIN"))) {
             response.sendRedirect("login");
         } else {
             RequestDispatcher rd = request.getRequestDispatcher("/views/admin/dash-board.jsp");

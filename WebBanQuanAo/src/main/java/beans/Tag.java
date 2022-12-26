@@ -1,40 +1,42 @@
 package beans;
 
+import java.sql.Timestamp;
+
 public class Tag {
-    private String idTag;
-    private String nameTag;
-    private String idBrand;
-    private int numOfProducts;
+    private String id;
+    private String name;
+    private String createBy;
+    private Timestamp createDate;
 
-    public String getIdTag() {
-        return idTag;
+    public String getId() {
+        return id;
     }
 
-    public void setIdTag(String idTag) {
-        this.idTag = idTag;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getNameTag() {
-        return nameTag;
+    public String getName() {
+        return name;
     }
 
-    public void setNameTag(String nameTag) {
-        this.nameTag = nameTag;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getIdBrand() {
-        return idBrand;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setIdBrand(String idBrand) {
-        this.idBrand = idBrand;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
-    public int getNumOfProducts() {
-        return numOfProducts;
+    public Timestamp getCreateDate() {
+        return createDate;
     }
 
-    public void setNumOfProducts(int numOfProducts) {
-        this.numOfProducts = numOfProducts;
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
     }
 }

@@ -1,31 +1,33 @@
 package beans;
 
+import java.sql.Timestamp;
+
 public class Brand {
-    private String idBrand;
-    private String nameBrand;
-    private int numOfProducts;
+    private String id;
+    private String name;
+    private Timestamp date;
 
-    public String getIdBrand() {
-        return idBrand;
+    public String getId() {
+        return id;
     }
 
-    public void setIdBrand(String idBrand) {
-        this.idBrand = idBrand;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getNameBrand() {
-        return nameBrand;
+    public String getName() {
+        return name;
     }
 
-    public void setNameBrand(String nameBrand) {
-        this.nameBrand = nameBrand;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getNumOfProducts() {
-        return numOfProducts;
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setNumOfProducts(int numOfProduct) {
-        this.numOfProducts = numOfProduct;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 }

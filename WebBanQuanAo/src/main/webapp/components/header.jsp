@@ -21,7 +21,7 @@
                     <div class="right-header">
                         <ul>
                             <c:if var="accountIsExist" test="${sessionScope.account != null}"/>
-                            <c:if test='${(accountIsExist && sessionScope.account.role.equals("ADMIN"))}'>
+                            <c:if test='${(accountIsExist && sessionScope.account.role.name.equals("ADMIN"))}'>
                                 <li><a href="admin-dash-board"><i
                                         class="fa fa-user"></i>Quản lý</a></li>
                             </c:if>

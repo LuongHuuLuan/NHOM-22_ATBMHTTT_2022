@@ -4,26 +4,33 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Color implements Serializable {
-    private String idColor;
-    private String nameColor;
+    private String id;
+    private String name;
+    private String createBy;
     private Timestamp createDate;
-    private int numOfProducts;
-    private String codeProduct;
 
-    public String getIdColor() {
-        return idColor;
+    public String getId() {
+        return id;
     }
 
-    public void setIdColor(String idColor) {
-        this.idColor = idColor;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getNameColor() {
-        return nameColor;
+    public String getName() {
+        return name;
     }
 
-    public void setNameColor(String nameColor) {
-        this.nameColor = nameColor;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
     public Timestamp getCreateDate() {
@@ -33,20 +40,4 @@ public class Color implements Serializable {
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
-
-    public int getNumOfProducts() {
-        return numOfProducts;
-    }
-
-    public void setNumOfProducts(int numOfProducts) {
-        this.numOfProducts = numOfProducts;
-    }
-
-	public String getCodeProduct() {
-		return codeProduct;
-	}
-
-	public void setCodeProduct(String codeProduct) {
-		this.codeProduct = codeProduct;
-	}
 }

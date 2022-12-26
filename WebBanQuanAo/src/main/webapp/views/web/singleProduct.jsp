@@ -10,6 +10,7 @@
 <!-- pages-title-end -->
 <!-- single peoduct content section start -->
 <jsp:useBean id="product" scope="request" type="beans.Product"/>
+<jsp:useBean id="productImages" scope="request" type="java.util.List<beans.Image>"/>
 <section class="single-product-area sit">
     <div class="container">
         <div class="row">
@@ -17,15 +18,15 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 none-si-pro">
                         <div class="pro-img-tab-content tab-content">
-                            <c:forEach var="i" begin="0" end="${product.getUrlImages().size() - 1}">
+                            <c:forEach var="i" begin="0" end="${productImages.size() - 1}">
                                 <c:if var="check" test="${i == 0}"/>
                                 <div class="tab-pane ${check?"active":""}" id="image-${i}">
                                     <div class="simpleLens-big-image-container">
                                         <a class="simpleLens-lens-image" data-lightbox="roadtrip"
-                                           data-lens-image='<c:url value="${product.getUrlImages().get(i)}"/>'
-                                           href='<c:url value="${product.getUrlImages().get(i)}"/>'>
-                                            <img src='<c:url value="${product.getUrlImages().get(i)}"/>'
-                                                 alt="${product.getUrlImages().get(i)}"
+                                           data-lens-image='<c:url value="${productImages.get(i).url}"/>'
+                                           href='<c:url value="${productImages.get(i).url}"/>'>
+                                            <img src='<c:url value="${productImages.get(i).url}"/>'
+                                                 alt="${productImages.get(i).url}"
                                                  class="simpleLens-big-image">
                                         </a>
                                     </div>
@@ -33,10 +34,10 @@
                             </c:forEach>
                         </div>
                         <div class="pro-img-tab-slider indicator-style2">
-                            <c:forEach var="i" begin="0" end="${product.getUrlImages().size() - 1}">
+                            <c:forEach var="i" begin="0" end="${productImages.size() - 1}">
                                 <div class="item"><a href="#image-${i}" data-toggle="tab"><img
-                                        src='<c:url value="${product.getUrlImages().get(i)}"/>'
-                                        alt="${product.getUrlImages().get(i)}"/></a></div>
+                                        src='<c:url value="${productImages.get(i).url}"/>'
+                                        alt="${productImages.get(i).url}"/></a></div>
                             </c:forEach>
                         </div>
                     </div>
@@ -47,9 +48,9 @@
                             </div>
                             <div class="pro-rating cendo-pro">
                                 <span class="star-right">
-                                    rate(${product.getNumberOfRate()}):
-                                     <c:if var="check" test="${product.getRate() != 0}">
-                                         <c:forEach var="i" begin="0" end="${product.getRate()}">
+                                    rate(${product.totalStar}):
+                                     <c:if var="check" test="${product.totalStar != 0}">
+                                         <c:forEach var="i" begin="0" end="${product.totalStar}">
                                              <i class="fa fa-star"></i>
                                          </c:forEach>
                                      </c:if>
@@ -59,10 +60,10 @@
                                 Product Code: ${product.id}
                             </p>
                             <p class="availability in-stock2">
-                                Availability: ${product.number}
+                                Availability: ${product.amount}
                             </p>
                             <p class="availability in-stock2">
-                                Brand: ${product.brand}
+                                Brand: ${product.brand.name}
                             </p>
                             <div class="pre-box">
                                 <span class="special-price">${product.price} VNĐ</span>
@@ -72,27 +73,27 @@
                                     <div class="add-to-box add-to-box2">
                                         <ul>
                                             <li id="my-color" style="white-space: nowrap; display: flex">
-                                                <c:forEach var="i" begin="0" end="${product.getColors().size() - 1}">
-                                                    <span>${product.getColors().get(i)}</span><strong>:</strong>
+                                                <c:forEach var="i" begin="0" end="${product.colors.size() - 1}">
+                                                    <span>${product.colors.get(i).name}</span><strong>:</strong>
                                                     <input type="radio" name="color"
-                                                           value="${product.getColors().get(i)}"
+                                                           value="${product.colors.get(i).name}"
                                                         <c:if var="check"
                                                               test="${i == 0}"/> ${check?'checked="true"':""}
                                                     >
                                                 </c:forEach>
                                             </li>
                                             <li id="my-size" style="display: flex;">
-                                                <c:forEach var="i" begin="0" end="${product.getSizes().size() - 1}">
-                                                    <span>${product.getSizes().get(i)}</span><strong>:</strong>
-                                                    <input type="radio" name="size" value="${product.getSizes().get(i)}"
+                                                <c:forEach var="i" begin="0" end="${product.sizes.size() - 1}">
+                                                    <span>${product.sizes.get(i).name}</span><strong>:</strong>
+                                                    <input type="radio" name="size" value="${product.sizes.get(i).name}"
                                                         <c:if var="check"
                                                               test="${i == 0}"/> ${check?'checked="true"':""}
                                                     >
                                                 </c:forEach>
                                             </li>
                                             <li><span>Tag</span><strong>:</strong>
-                                                <c:forEach var="tag" items="${product.getTags()}">
-                                                    <a href="#">${tag}</a>
+                                                <c:forEach var="tag" items="${product.tags}">
+                                                    <a href="#">${tag.name}</a>
                                                 </c:forEach>
                                             </li>
                                         </ul>
@@ -110,8 +111,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div  class="product-icon">
-                                                <a id="my-add-to-card" href="http://localhost:8080/WebBanQuanAo/login" title="Add to cart">
+                                            <div class="product-icon">
+                                                <a id="my-add-to-card" href="http://localhost:8080/WebBanQuanAo/login"
+                                                   title="Add to cart">
                                                     <i class="fa fa-shopping-cart"></i>
                                                 </a>
                                             </div>

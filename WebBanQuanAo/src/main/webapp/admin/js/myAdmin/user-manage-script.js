@@ -5,10 +5,9 @@ $(document).ready(function () {
     $.ajax({
         url: `http://localhost:8080${$path_base}/api-get-user`,
         type: 'GET',
-        dataType: 'text',
+        dataType: 'json',
         success(values) {
-            // const json = JSON.parse(d);
-            const usersData = JSON.parse(values).map((x) => {
+            const usersData = values.map((x) => {
                 return [
                     x.userID,
                     x.firstName,
@@ -21,7 +20,6 @@ $(document).ready(function () {
                 ]
             })
             // dataSet = data;
-            console.log(usersData)
             $('#table-user').DataTable({
                 data: usersData,
                 columns: [
@@ -32,7 +30,11 @@ $(document).ready(function () {
                     {title: 'Email'},
                     {title: 'Địa chỉ'},
                     {title: 'Tên tài khoản'},
-                    {title: 'Vai trò'},
+                    {
+                        title: 'Vai trò', render: function (role) {
+                            return `<td>${role.name}</td>`;
+                        }
+                    },
                     {
                         title: '',
                         render: function () {
@@ -114,7 +116,7 @@ function edit(thisElement) {
     $('#email_edit').val(data[4]);
     $('#address_edit').val(data[5]);
     $('#username_edit').val(data[6]);
-    $('#role_edit').val(data[7]).change();
+    $('#role_edit').val(data[7].Id).change();
     $('#editUser').modal('show');
 }
 

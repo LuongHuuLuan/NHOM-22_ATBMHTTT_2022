@@ -26,9 +26,9 @@
                             </li>
                             <c:forEach var="tag" items="${requestScope.tags}">
                                 <li style="cursor: pointer"
-                                    class="cat-item ${requestScope.type.equals(tag.idTag)?'current-cat':null}">
-                                    <a onclick="filterType('${tag.idTag}')">${tag.nameTag}</a>
-                                    <span class="count">(${tag.numOfProducts})</span>
+                                    class="cat-item ${requestScope.type.equals(tag.id)?'current-cat':null}">
+                                    <a onclick="filterType('${tag.id}')">${tag.name}</a>
+<%--                                    <span class="count">(${tag.numOfProducts})</span>--%>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -42,9 +42,9 @@
                             </li>
                             <c:forEach var="brand" items="${requestScope.brands}">
                                 <li style="cursor: pointer"
-                                    class="cat-item ${requestScope.brand.equals(brand.idBrand)?'current-cat':null}">
-                                    <a onclick="filterBrand('${brand.idBrand}')">${brand.nameBrand}</a>
-                                    <span class="count">(${brand.numOfProducts})</span>
+                                    class="cat-item ${requestScope.brand.equals(brand.id)?'current-cat':null}">
+                                    <a onclick="filterBrand('${brand.id}')">${brand.name}</a>
+<%--                                    <span class="count">(${brand.numOfProducts})</span>--%>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -83,9 +83,9 @@
                             </li>
                             <c:forEach var="color" items="${requestScope.colors}">
                                 <li style="cursor: pointer"
-                                    class="cat-item cat-item-8 ${requestScope.color.equals(color.idColor)?'current-cat':null}">
-                                    <a onclick="filterColor('${color.idColor}')">${color.nameColor}</a>
-                                    <span class="count">(${color.numOfProducts})</span>
+                                    class="cat-item cat-item-8 ${requestScope.color.equals(color.id)?'current-cat':null}">
+                                    <a onclick="filterColor('${color.id}')">${color.name}</a>
+<%--                                    <span class="count">(${color.numOfProducts})</span>--%>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -219,23 +219,23 @@
                                                             <div class="pro-type">
                                                                 <span>new</span>
                                                             </div>
-                                                            <a href="single-product?productId=${product.getId()}">
+                                                            <a href="single-product?productId=${product.id}">
                                                                 <img
-                                                                        src='<c:url value="${product.getThumbnail()}"/>'
+                                                                        src='<c:url value="${product.thumbnail}"/>'
                                                                         alt="Product Title"
                                                                 />
                                                             </a>
                                                         </div>
                                                         <div class="product-dsc">
                                                             <h3>
-                                                                <a href="#">${product.getName()}</a>
+                                                                <a href="#">${product.name}</a>
                                                             </h3>
                                                             <div class="star-price">
-                                                                <span class="price-left">${product.getPrice()}VNĐ</span>
+                                                                <span class="price-left">${product.price}VNĐ</span>
                                                                 <span class="star-right">
-                                                                    <c:if var="check" test="${product.getRate() != 0}">
+                                                                    <c:if var="check" test="${product.totalStar != 0}">
                                                                         <c:forEach var="i" begin="0"
-                                                                                   end="${product.getRate()}">
+                                                                                   end="${product.totalStar}">
                                                                             <i class="fa fa-star"></i>
                                                                         </c:forEach>
                                                                     </c:if>

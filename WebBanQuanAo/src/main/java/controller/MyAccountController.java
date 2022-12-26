@@ -34,18 +34,22 @@ public class MyAccountController extends HttpServlet {
                 String email = request.getParameter("email");
                 String sdt = request.getParameter("sdt");
                 String address = request.getParameter("address");
-                AccountServices.updateAccount(account.getUserID() + "", lastName, firstName, sdt, email, address, account.getUserName());
+
                 account.setLastName(lastName);
                 account.setFirstName(firstName);
                 account.setEmail(email);
                 account.setPhoneNumber(sdt);
                 account.setAddress(address);
+
+                AccountServices.update(account, false);
             } else if (type.equals("changePass")) {
                 String password = request.getParameter("password");
                 String newPass = request.getParameter("newpass");
-                String hashPass = HashService.getHash(password);
-                if(hashPass.equals(account.getPassWord())) {
-                    AccountServices.updateAccount(account.getUserID()+"", HashService.getHash(newPass));
+
+                Account accountWithNewPass = AccountServices.getAccount(account.getUserName(), password, true);
+                if (account != null) {
+                    accountWithNewPass.setPassWord(newPass);
+                    AccountServices.update(accountWithNewPass, true);
                 }
             }
         }

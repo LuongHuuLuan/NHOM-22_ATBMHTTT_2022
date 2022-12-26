@@ -1,6 +1,7 @@
 package controller;
 
 import Services.RegisterService;
+import beans.Register;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,7 +40,14 @@ public class RegisterController extends HttpServlet {
         String email = request.getParameter("email");
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
-        int checkRegister = RegisterService.addRegister(lastName, firstName, phone, email, userName, password);
+        Register register = new Register();
+        register.setLastName(lastName);
+        register.setFirstName(firstName);
+        register.setPhoneNumber(phone);
+        register.setEmail(email);
+        register.setUserName(userName);
+        register.setPassWord(password);
+        int checkRegister = RegisterService.addRegister(register);
         String message = "";
         String href = "";
         String hrefName = "";

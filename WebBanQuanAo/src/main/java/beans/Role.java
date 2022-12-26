@@ -1,19 +1,20 @@
 package beans;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Size {
-    private String id;
+public class Role implements Serializable {
+    private String Id;
     private String name;
-    private String createBy;
     private Timestamp createDate;
+    private Timestamp modifyDate;
 
     public String getId() {
-        return id;
+        return Id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        Id = id;
     }
 
     public String getName() {
@@ -24,19 +25,19 @@ public class Size {
         this.name = name;
     }
 
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
     public Timestamp getCreateDate() {
         return createDate;
     }
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    public Timestamp getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Timestamp modifyDate) {
+        this.modifyDate = modifyDate;
     }
 }

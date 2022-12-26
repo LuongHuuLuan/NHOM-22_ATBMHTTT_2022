@@ -17,7 +17,7 @@ import java.util.List;
 public class AddToCard extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Product> products = ProductDao.loadProduct();
+        List<Product> products = ProductDao.findAll();
         Gson gson = new Gson();
         String productsJson = gson.toJson(products);
         response.setContentType("application/json");

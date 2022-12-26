@@ -17,7 +17,7 @@ public class OrderItemDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 OrderItem item = new OrderItem();
-                Product product = ProductDao.getProduct(resultSet.getString("MA_SP"));
+                Product product = ProductDao.findOneById(resultSet.getString("MA_SP"));
                 String size = resultSet.getString("KICH_THUOC");
                 String color = resultSet.getString("MAU_SAC");
                 int amount = resultSet.getInt("SO_LUONG");

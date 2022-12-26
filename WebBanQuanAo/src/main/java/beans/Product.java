@@ -8,27 +8,18 @@ import java.util.List;
 public class Product implements Serializable {
     private String id;
     private String name;
-    private String brand;
-    private String price;
+    private Brand brand;
+    private double price;
     private String description;
     private String thumbnail;
-    private Timestamp date;
-    private int numberOfRate;
-    private int rate;
-    private int number;
-    private List<String> colors;
-    private List<String> sizes;
-    private List<String> tags;
-    private List<String> urlImages;
-    private String creator;
-    
-
-    public Product() {
-        colors = new ArrayList<>();
-        sizes = new ArrayList<>();
-        tags = new ArrayList<>();
-        urlImages = new ArrayList<>();
-    }
+    private String createBy;
+    private Timestamp createDate;
+    private int totalReviews;
+    private int totalStar;
+    private int amount;
+    private List<Color> colors;
+    private List<Size> sizes;
+    private List<Tag> tags;
 
     public String getId() {
         return id;
@@ -46,19 +37,19 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public String getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(Brand brand) {
         this.brand = brand;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -78,95 +69,67 @@ public class Product implements Serializable {
         this.thumbnail = thumbnail;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
-    public int getNumberOfRate() {
-        return numberOfRate;
+    public Timestamp getCreateDate() {
+        return createDate;
     }
 
-    public void setNumberOfRate(int numberOfRate) {
-        this.numberOfRate = numberOfRate;
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
     }
 
-    public int getRate() {
-        return rate;
+    public int getTotalReviews() {
+        return totalReviews;
     }
 
-    public void setRate(int rate) {
-        this.rate = rate;
+    public void setTotalReviews(int totalReviews) {
+        this.totalReviews = totalReviews;
     }
 
-    public int getNumber() {
-        return number;
+    public int getTotalStar() {
+        return totalStar;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setTotalStar(int totalStar) {
+        this.totalStar = totalStar;
     }
 
-    public void addColor(String color) {
-        this.colors.add(color);
+    public int getAmount() {
+        return amount;
     }
 
-    public void addSize(String size) {
-        this.sizes.add(size);
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
-    public void addTag(String tag) {
-        this.tags.add(tag);
-    }
-
-    public void addUrlImage(String urlImage) {
-        this.urlImages.add(urlImage);
-    }
-
-    public List<String> getColors() {
+    public List<Color> getColors() {
         return colors;
     }
 
-    public List<String> getSizes() {
+    public void setColors(List<Color> colors) {
+        this.colors = colors;
+    }
+
+    public List<Size> getSizes() {
         return sizes;
     }
 
-    public List<String> getTags() {
+    public void setSizes(List<Size> sizes) {
+        this.sizes = sizes;
+    }
+
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public List<String> getUrlImages() {
-        return urlImages;
-    }
-
-    public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	@Override
-    public String toString() {
-        return "Product{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                ", price='" + price + '\'' +
-                ", description='" + description + '\'' +
-                ", thumbnail='" + thumbnail + '\'' +
-                ", date=" + date +
-                ", numberOfRate=" + numberOfRate +
-                ", rate=" + rate +
-                ", number=" + number +
-                ", colors=" + colors +
-                ", sizes=" + sizes +
-                ", tags=" + tags +
-                ", urlImages=" + urlImages +
-                '}';
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

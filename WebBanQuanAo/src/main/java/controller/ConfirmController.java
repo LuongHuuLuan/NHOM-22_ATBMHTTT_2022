@@ -1,5 +1,7 @@
 package controller;
 
+import Services.RegisterService;
+import beans.Register;
 import dao.AccountDao;
 
 import javax.servlet.RequestDispatcher;
@@ -17,7 +19,7 @@ public class ConfirmController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         String token = request.getParameter("token");
-        AccountDao.updateStateRegister(id, token, AccountDao.RegisterState.SUCCESS);
+        RegisterService.updateStateRegister(id, token);
         String message = "";
         String href = "";
         String hrefName = "";

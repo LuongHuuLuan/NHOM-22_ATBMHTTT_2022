@@ -5,6 +5,9 @@ import beans.Color;
 import beans.Product;
 import beans.Tag;
 import Services.ProductServices;
+import dao.BrandDao;
+import dao.ColorDao;
+import dao.TagDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,9 +35,9 @@ public class ShopController extends HttpServlet {
         }
         int endPage = ProductServices.getNumOfPage(numOfProducts, type, brand, color);
         List<Product> products = ProductServices.getProductForPage(index, numOfProducts, type, brand, color, sort);
-        List<Brand> brands = ProductServices.getBrandsList();
-        List<Tag> tags = ProductServices.getTagsList();
-        List<Color> colors = ProductServices.getColorsList();
+        List<Brand> brands = BrandDao.findAll();
+        List<Tag> tags = TagDao.findAll();
+        List<Color> colors = ColorDao.findAll();
 
         request.setAttribute("numOfProducts", numOfProducts);
         request.setAttribute("sort", sort);
