@@ -1,56 +1,66 @@
 package dao;
 
-import beans.*;
+import mapper.OrderItemMapper;
+import model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderItemDao {
-    public static List<OrderItem> getItems(int orderID) {
-        String sql = "SELECT * FROM CTHD WHERE MA_HOA_DON = ?";
-        List<OrderItem> items = new ArrayList<>();
+    public static List<OrderItem> findById(long id) {
         Connection connection = Connect.getInstance().getConnection();
+        List<OrderItem> orders = new ArrayList<>();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, orderID);
+            String query = "SELECT * FROM order_detail WHERE ORDER_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                OrderItem item = new OrderItem();
-                Product product = ProductDao.findOneById(resultSet.getString("MA_SP"));
-                String size = resultSet.getString("KICH_THUOC");
-                String color = resultSet.getString("MAU_SAC");
-                int amount = resultSet.getInt("SO_LUONG");
-                item.setOrderID(orderID);
-                item.setProduct(product);
-                item.setSize(size);
-                item.setColor(color);
-                item.setAmount(amount);
-                items.add(item);
+                OrderItem item = OrderItemMapper.mapRow(resultSet);
+                orders.add(item);
             }
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return items;
+        return orders;
     }
 
-    public static boolean deleteItem(int id) {
+    public static boolean add(OrderItem item) {
+        String sql = "INSERT INTO order_detail(ORDER_ID, PRODUCT_ID, COLOR_ID, SIZE_ID, AMOUNT, PRICE, DISCOUNT) VALUES(?, ?, ?, ?, ?, ?, ?);";
         Connection connection = Connect.getInstance().getConnection();
-        String sql = "DELETE FROM CTHD WHERE MA_HOA_DON=?";
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            int rowEffects = preparedStatement.executeUpdate();
-            if (rowEffects > 0) {
-                return true;
-            }
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, item.getOrderId());
+            preparedStatement.setLong(2, item.getProduct().getId());
+            preparedStatement.setLong(3, item.getColor().getId());
+            preparedStatement.setLong(4, item.getSize().getId());
+            preparedStatement.setInt(5, item.getAmount());
+            preparedStatement.setDouble(6, item.getPrice());
+            preparedStatement.setInt(7, item.getDiscount());
+            int resultSet = preparedStatement.executeUpdate();
             preparedStatement.close();
+            return resultSet != 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean delete(long id) {
+        String sql = "DELETE FROM order_detail WHERE ORDER_ID = ?";
+        Connection connection = Connect.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            int resultSet = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return resultSet != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

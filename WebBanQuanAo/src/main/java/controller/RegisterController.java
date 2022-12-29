@@ -1,7 +1,8 @@
 package controller;
 
+import Services.LoginService;
 import Services.RegisterService;
-import beans.Register;
+import model.Account;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class RegisterController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LoginService.login(request, response);
         String firstName = request.getParameter("first-name");
         String lastName = request.getParameter("last-name");
         String phone = request.getParameter("phone");
@@ -40,17 +42,17 @@ public class RegisterController extends HttpServlet {
         String email = request.getParameter("email");
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
-        Register register = new Register();
-        register.setLastName(lastName);
-        register.setFirstName(firstName);
-        register.setPhoneNumber(phone);
-        register.setEmail(email);
-        register.setUserName(userName);
-        register.setPassWord(password);
-        int checkRegister = RegisterService.addRegister(register);
         String message = "";
         String href = "";
         String hrefName = "";
+        Account newAccount = new Account();
+        newAccount.setFirstName(firstName);
+        newAccount.setLastName(lastName);
+        newAccount.setPhone(phone);
+        newAccount.setEmail(email);
+        newAccount.setUsername(userName);
+        newAccount.setPassword(password);
+        int checkRegister = RegisterService.checkRegister(newAccount);
         if (checkRegister == 0) {
             message = "Vui lòng click vào link trong email để xác thực đăng ký";
             request.setAttribute("message", message);

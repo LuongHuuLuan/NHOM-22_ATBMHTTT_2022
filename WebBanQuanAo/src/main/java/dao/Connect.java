@@ -9,7 +9,7 @@ public class Connect {
     private static Connection connection;
 
     private Connect() {
-        String url = "jdbc:mysql://localhost:3306/WEBBANHANG";
+        String url = "jdbc:mysql://localhost:3306/clothers_shop";
         String userName = "root";
         String password = "";
         try {
@@ -26,7 +26,6 @@ public class Connect {
                 instance = new Connect();
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return instance;

@@ -1,22 +1,12 @@
-package beans;
+package model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
-public class OrderItem implements Serializable {
-    private int orderID;
+public class Warehouse extends ModelParent implements Serializable {
     private Product product;
-    private String size;
-    private String color;
+    private Size size;
+    private Color color;
     private int amount;
-
-    public int getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
-    }
 
     public Product getProduct() {
         return product;
@@ -26,19 +16,19 @@ public class OrderItem implements Serializable {
         this.product = product;
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 

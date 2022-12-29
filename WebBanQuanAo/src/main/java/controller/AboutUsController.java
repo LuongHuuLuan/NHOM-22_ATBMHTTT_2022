@@ -1,5 +1,7 @@
 package controller;
 
+import Services.LoginService;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +14,7 @@ import java.io.IOException;
 public class AboutUsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LoginService.login(request, response);
         request.setAttribute("pageName", "Chúng tôi");
         RequestDispatcher rd = request.getRequestDispatcher("/views/web/aboutUs.jsp");
         rd.forward(request, response);

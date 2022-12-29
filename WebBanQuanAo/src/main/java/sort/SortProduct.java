@@ -1,10 +1,17 @@
 package sort;
 
+import dao.BrandDao;
+import dao.CategoryDao;
+import dao.ColorDao;
+import model.Brand;
+import model.Category;
+import model.Color;
+
 public class SortProduct {
     private String orderType = null;
-    private String type = null;
-    private String brand = null;
-    private String color = null;
+    private Category category = null;
+    private Brand brand = null;
+    private Color color = null;
 
     public String getOrderType() {
         return orderType;
@@ -15,40 +22,41 @@ public class SortProduct {
             this.orderType = orderType;
     }
 
-    public String getType() {
-        return type;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setType(String type) {
-        if (!type.equalsIgnoreCase("all"))
-            this.type = type;
+    public void setCategory(String category) {
+        if (!category.equalsIgnoreCase("all")) {
+            this.category = CategoryDao.findOneByCode(category);
+        }
     }
 
-    public String getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
     public void setBrand(String brand) {
         if (!brand.equalsIgnoreCase("all"))
-            this.brand = brand;
+            this.brand = BrandDao.findOneByCode(brand);
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
     public void setColor(String color) {
         if (!color.equalsIgnoreCase("all"))
-            this.color = color;
+            this.color = ColorDao.findOneByCode(color);
     }
 
     @Override
     public String toString() {
         return "SortProduct{" +
                 "orderType='" + orderType + '\'' +
-                ", type='" + type + '\'' +
-                ", brand='" + brand + '\'' +
-                ", color='" + color + '\'' +
+                ", category=" + category +
+                ", brand=" + brand +
+                ", color=" + color +
                 '}';
     }
 }

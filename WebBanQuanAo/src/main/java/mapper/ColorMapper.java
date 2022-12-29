@@ -1,7 +1,6 @@
 package mapper;
 
-import beans.Brand;
-import beans.Color;
+import model.Color;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,10 +8,13 @@ import java.sql.SQLException;
 public class ColorMapper {
     public static Color mapRow(ResultSet rs) throws SQLException {
         Color color = new Color();
-        color.setId(rs.getString("MA_CT_MAU"));
-        color.setName(rs.getString("TEN_MAU"));
-        color.setCreateBy(rs.getString("NGUOI_THEM"));
-        color.setCreateDate(rs.getTimestamp("NGAY_THEM"));
+        color.setId(rs.getLong("ID"));
+        color.setCode(rs.getString("CODE"));
+        color.setName(rs.getString("NAME"));
+        color.setCreatedDate(rs.getTimestamp("CREATED_DATE"));
+        color.setCreatedBy(rs.getString("CREATED_BY"));
+        color.setModifiedDate(rs.getTimestamp("MODIFIED_DATE"));
+        color.setModifiedBy(rs.getString("MODIFIED_BY"));
         return color;
     }
 }

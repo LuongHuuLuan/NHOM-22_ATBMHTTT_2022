@@ -1,7 +1,7 @@
 package api;
 
-import beans.Account;
-import beans.Product;
+import model.Account;
+import model.Product;
 import dao.ProductDao;
 import Services.CartService;
 import com.google.gson.Gson;
@@ -29,36 +29,19 @@ public class AddToCard extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        System.out.println(session.getAttribute("productID-noUser"));
-
-        Cookie[] cookies = request.getCookies();
-        Account account = (Account) request.getSession().getAttribute("account");
-        Integer idCart = null;
-        idCart = account.getUserID();
-        String idProduct = request.getParameter("productId");
-        String color = request.getParameter("color");
-        String size = request.getParameter("size");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-        CartService.addToCart(idCart, idProduct, quantity, color, size);
-
-//        if (idCart != null) {
-//            CartService.addToCart(idCart, idProduct, quantity, color, size);
-//        } else {
-//            Cookie cookieProductID = new Cookie("productID", idProduct);
-//            Cookie cookieQuantity = new Cookie("quantity", quantity + "");
-//            Cookie cookieColor = new Cookie("color", color);
-//            Cookie cookieSize = new Cookie("size", size);
+//        HttpSession session = request.getSession();
+//        System.out.println(session.getAttribute("productID-noUser"));
 //
-//            cookieProductID.setMaxAge(60 * 60 * 24);
-//            response.addCookie(cookieProductID);
-//            cookieQuantity.setMaxAge(60 * 60 * 24);
-//            response.addCookie(cookieQuantity);
-//            cookieColor.setMaxAge(60 * 60 * 24);
-//            response.addCookie(cookieColor);
-//            cookieSize.setMaxAge(60 * 60 * 24);
-//            response.addCookie(cookieSize);
-//        }
+//        Cookie[] cookies = request.getCookies();
+//        Account account = (Account) request.getSession().getAttribute("account");
+//        Integer idCart = null;
+//        idCart = account.getUserID();
+//        String idProduct = request.getParameter("productId");
+//        String color = request.getParameter("color");
+//        String size = request.getParameter("size");
+//        int quantity = Integer.parseInt(request.getParameter("quantity"));
+//
+//        CartService.addToCart(idCart, idProduct, quantity, color, size);
+//
     }
 }

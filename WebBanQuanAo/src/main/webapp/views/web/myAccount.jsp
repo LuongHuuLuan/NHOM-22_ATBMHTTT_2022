@@ -90,7 +90,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="text" placeholder="Họ"
                                                                name="lastname"
-                                                               value="${MTAccount?account.getFirstName():""}">
+                                                               value="${MTAccount?account.firstName:""}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group required">
@@ -98,7 +98,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="text" placeholder="Tên"
                                                                name="firstname"
-                                                               value="${MTAccount?account.getLastName():""}">
+                                                               value="${MTAccount?account.lastName:""}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group required">
@@ -106,7 +106,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="email" placeholder="E-Mail"
                                                                name="email"
-                                                               value="${MTAccount?account.getEmail():""}">
+                                                               value="${MTAccount?account.email:""}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group required">
@@ -114,7 +114,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="tel" placeholder="SĐT"
                                                                name="sdt"
-                                                               value="${MTAccount?account.getPhoneNumber():""}">
+                                                               value="${MTAccount?account.phone:""}">
                                                     </div>
                                                 </div>
 
@@ -123,7 +123,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="tel" placeholder="Địa chỉ"
                                                                name="address"
-                                                               value="${MTAccount?account.getAddress():""}">
+                                                               value="${MTAccount?account.address:""}">
                                                     </div>
                                                 </div>
 

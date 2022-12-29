@@ -13,6 +13,8 @@
     <link rel="shortcut icon" type="image/x-icon" href='<c:url value= "/assets/imgs/favicon.ico" />'/>
     <!-- include css -->
     <jsp:include page="/components/css.jsp"/>
+    <!-- jquery latest version -->
+    <script src='<c:url value="/assets/js/vendor/jquery-1.12.0.min.js"/>'></script>
     <style>
         .testimonials {
             background-image: url('<c:url value="/assets/imgs/testimonial/1.jpg"/>');

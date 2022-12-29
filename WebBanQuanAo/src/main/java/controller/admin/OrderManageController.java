@@ -1,7 +1,6 @@
 package controller.admin;
 
-import Services.AccountServices;
-import beans.Account;
+import model.Account;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

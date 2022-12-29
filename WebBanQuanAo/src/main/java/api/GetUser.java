@@ -1,6 +1,6 @@
 package api;
 
-import beans.Account;
+import model.Account;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,16 +13,16 @@ import java.io.IOException;
 public class GetUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Account acc = null;
-        acc = (Account) request.getSession().getAttribute("account");
-        String reuslt = "null";
-        if (acc != null) {
-            reuslt = acc.getUserName();
-        }
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().println(reuslt);
-        response.getWriter().flush();
+//        Account acc = null;
+//        acc = (Account) request.getSession().getAttribute("account");
+//        String reuslt = "null";
+//        if (acc != null) {
+//            reuslt = acc.getUserName();
+//        }
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().println(reuslt);
+//        response.getWriter().flush();
     }
 
     @Override

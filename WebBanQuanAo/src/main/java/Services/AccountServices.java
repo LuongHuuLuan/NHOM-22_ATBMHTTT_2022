@@ -1,74 +1,14 @@
 package Services;
 
-import beans.Account;
+import model.Account;
 import dao.AccountDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AccountServices {
     private static List<Account> accounts = new ArrayList<Account>();
-
-//    public static Account getAccount(String userName, String passWord, boolean isHashCode) {
-//        String hashPassword = "";
-//        if (isHashCode) {
-//            hashPassword = HashService.getHash(passWord);
-//        } else {
-//            hashPassword = passWord;
-//        }
-//        Account account = AccountDao.getUser(userName, hashPassword);
-//        return account;
-//    }
-//
-//
-//    public static String vadiladate(String userName, String passWord) {
-//        String result = "";
-//        // kiểm tra ít nhất 4 kí tự có 1 chữ cái và 1 chữ số
-//        String regexCheckPassWord = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,}$";
-//        if (userName.equals("")) {
-//            result = "Tài khoản không được để trống!";
-//        } else {
-//            if (!passWord.matches(regexCheckPassWord)) {
-//                result = "Mật khẩu phải có ít nhất 4 kí tự, một chữ cái và một chữ số!";
-//            }
-//        }
-//        return result;
-//    }
-//
-//    public static String isExistUsername(String username) {
-//        return AccountDao.getUserName(username) == null ? "" : "Tài khoản đã tồn tại!";
-//    }
-//
-//    public static int addNewAccount(String lastName, String firstName, String phoneNumber, String email, String
-//            userName, String password) {
-//        boolean emailIsExist = email.equals(AccountDao.getEmail(email));
-//        int result = 0;
-//        if (!emailIsExist) {
-//            boolean userNameIsExist = userName.equals(AccountDao.getUserName(userName));
-//            if (!userNameIsExist) {
-//                password = HashService.getHash(password);
-//                boolean addAcc = AccountDao.addAccount(lastName, firstName, phoneNumber, email, userName, password);
-//                if(!addAcc) {
-//                    result = 1;
-//                }
-//            } else {
-//                result = 3;
-//            }
-//        } else {
-//            result = 2;
-//        }
-//        return result;
-//    }
-//
-//    public static boolean updateAccount(String idAccount, String lastname, String firstname, String phone, String email, String address, String username, String role){
-//        return AccountDao.updateAccount(idAccount, lastname, firstname, phone, email, address, username, role);
-//    }
-//    public static boolean updateAccount(String idAccount, String lastname, String firstname, String phone, String email, String address, String username){
-//        return AccountDao.updateAccount(idAccount, lastname, firstname, phone, email, address, username);
-//    }
-//    public static boolean updateAccount(String idAccount, String password){
-//        return AccountDao.updateAccount(idAccount, password);
-//    }
 
     // new
     public static Account getAccount(String userName, String passWord, boolean isHash) {
@@ -79,8 +19,15 @@ public class AccountServices {
         return AccountDao.findOneByUserName(username) == null ? "" : "Tài khoản đã tồn tại!";
     }
 
-    public static int addNewAccount(Account account) {
-        return AccountDao.add(account);
+    public static Account reLogin(String reLoginToken) {
+        Account account = AccountDao.findOneByReLoginToken(reLoginToken);
+        account.setReLoginToken(UUID.randomUUID().toString());
+        AccountDao.update(account, false);
+        return account;
+    }
+
+    public static boolean addNewAccount(Account account) {
+        return AccountDao.add(account) != -1;
     }
 
     public static boolean update(Account account, boolean isHash) {

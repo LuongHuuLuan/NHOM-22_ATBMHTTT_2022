@@ -2,7 +2,7 @@ package controller.admin;
 
 import javax.servlet.http.HttpSession;
 
-import beans.Account;
+import model.Account;
 import Services.AccountServices;
 import dao.AccountDao;
 import dao.RoleDao;
@@ -38,55 +38,55 @@ public class UserManageController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setCharacterEncoding("utf-8");
-        String action = request.getParameter("action");
-        String idAccount = request.getParameter("idAccount");
-        String lastName = request.getParameter("last-name");
-        String firstName = request.getParameter("first-name");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String userName = request.getParameter("username");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role_edit");
-
-        Account account = AccountDao.findOneById(Integer.parseInt(idAccount));
-        account.setLastName(lastName);
-        account.setFirstName(firstName);
-        account.setPhoneNumber(phone);
-        account.setEmail(email);
-        account.setAddress(address);
-        account.setUserName(userName);
-        account.setPassWord(password);
-        account.setRole(RoleDao.findOneById(role));
-        switch (action) {
-            case "update": {
-                boolean update = AccountServices.update(account, false);
-                break;
-            }
-            default: {
-
-                int checkAddAccount = AccountServices.addNewAccount(account);
-                String message = "Thêm thành công";
-                switch (checkAddAccount) {
-                    case 0:
-                        message = "Thêm tài khoản thành công";
-                        break;
-                    case 1:
-                        message = "Đã xảy ra lỗi trong quá trình đăng ký vui lòng thử lại sau";
-                        break;
-                    case 2:
-                        message = "Email đã được sử dụng";
-                        break;
-                    default:
-                        message = "Tên tài khoản đã được sử dụng, Vui lòng chọn tên tài khoản khác";
-                        break;
-                }
-                request.setAttribute("message", message);
-                break;
-            }
-
-        }
+//        response.setCharacterEncoding("utf-8");
+//        String action = request.getParameter("action");
+//        String idAccount = request.getParameter("idAccount");
+//        String lastName = request.getParameter("last-name");
+//        String firstName = request.getParameter("first-name");
+//        String phone = request.getParameter("phone");
+//        String email = request.getParameter("email");
+//        String address = request.getParameter("address");
+//        String userName = request.getParameter("username");
+//        String password = request.getParameter("password");
+//        String role = request.getParameter("role_edit");
+//
+//        Account account = AccountDao.findOneById(Integer.parseInt(idAccount));
+//        account.setLastName(lastName);
+//        account.setFirstName(firstName);
+//        account.setPhoneNumber(phone);
+//        account.setEmail(email);
+//        account.setAddress(address);
+//        account.setUserName(userName);
+//        account.setPassWord(password);
+//        account.setRole(RoleDao.findOneById(role));
+//        switch (action) {
+//            case "update": {
+//                boolean update = AccountServices.update(account, false);
+//                break;
+//            }
+//            default: {
+//
+//                long checkAddAccount = AccountServices.addNewAccount(account);
+//                String message = "Thêm thành công";
+//                switch (checkAddAccount) {
+//                    case 0:
+//                        message = "Thêm tài khoản thành công";
+//                        break;
+//                    case 1:
+//                        message = "Đã xảy ra lỗi trong quá trình đăng ký vui lòng thử lại sau";
+//                        break;
+//                    case 2:
+//                        message = "Email đã được sử dụng";
+//                        break;
+//                    default:
+//                        message = "Tên tài khoản đã được sử dụng, Vui lòng chọn tên tài khoản khác";
+//                        break;
+//                }
+//                request.setAttribute("message", message);
+//                break;
+//            }
+//
+//        }
 
         doGet(request, response);
     }

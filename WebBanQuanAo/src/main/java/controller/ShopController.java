@@ -1,13 +1,14 @@
 package controller;
 
-import beans.Brand;
-import beans.Color;
-import beans.Product;
-import beans.Tag;
+import Services.LoginService;
+import model.Brand;
+import model.Category;
+import model.Color;
+import model.Product;
 import Services.ProductServices;
 import dao.BrandDao;
 import dao.ColorDao;
-import dao.TagDao;
+import dao.CategoryDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ShopController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LoginService.login(request, response);
         String indexPage = request.getParameter("page");
         int index = Integer.parseInt(indexPage);
         String numOfProductsString = request.getParameter("numOfProducts");
@@ -36,7 +38,7 @@ public class ShopController extends HttpServlet {
         int endPage = ProductServices.getNumOfPage(numOfProducts, type, brand, color);
         List<Product> products = ProductServices.getProductForPage(index, numOfProducts, type, brand, color, sort);
         List<Brand> brands = BrandDao.findAll();
-        List<Tag> tags = TagDao.findAll();
+        List<Category> categories = CategoryDao.findAll();
         List<Color> colors = ColorDao.findAll();
 
         request.setAttribute("numOfProducts", numOfProducts);
@@ -50,7 +52,7 @@ public class ShopController extends HttpServlet {
         request.setAttribute("endPage", endPage);
         request.setAttribute("products", products);
         request.setAttribute("brands", brands);
-        request.setAttribute("tags", tags);
+        request.setAttribute("categories", categories);
         request.setAttribute("colors", colors);
         request.setAttribute("pageName", "Cửa hàng");
 

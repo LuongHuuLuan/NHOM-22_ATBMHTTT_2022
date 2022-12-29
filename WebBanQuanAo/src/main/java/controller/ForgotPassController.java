@@ -1,6 +1,7 @@
 package controller;
 
 import Services.ForgotPasswordService;
+import Services.LoginService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import java.io.IOException;
 public class ForgotPassController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LoginService.login(request, response);
         request.setAttribute("pageName", "Quên mật khẩu");
         RequestDispatcher rd = request.getRequestDispatcher("/views/web/forgotPass.jsp");
         rd.forward(request, response);

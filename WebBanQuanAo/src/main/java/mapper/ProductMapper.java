@@ -1,8 +1,6 @@
 package mapper;
 
-import beans.Account;
-import beans.Product;
-import beans.Role;
+import model.Product;
 import dao.*;
 
 import java.sql.ResultSet;
@@ -11,20 +9,22 @@ import java.sql.SQLException;
 public class ProductMapper {
     public static Product mapRow(ResultSet rs) throws SQLException {
         Product product = new Product();
-        product.setId(rs.getString("MA_SP"));
-        product.setName(rs.getString("TEN_SP"));
-        product.setBrand(BrandDao.findOneById(rs.getString("MA_NHAN_HIEU")));
-        product.setPrice(rs.getDouble("GIA"));
-        product.setDescription(rs.getString("MO_TA"));
-        product.setThumbnail(rs.getString("HINH_NHO"));
-        product.setCreateBy(rs.getString("NGUOI_THEM"));
-        product.setCreateDate(rs.getTimestamp("NGAY_THEM"));
-        product.setTotalReviews(rs.getInt("TONG_DANH_GIA"));
-        product.setTotalStar(rs.getInt("TONG_SAO"));
-        product.setAmount(rs.getInt("SO_LUONG"));
-        product.setColors(ColorDao.findByProduct(product));
-        product.setTags(TagDao.findByProduct(product));
-        product.setSizes(SizeDao.findByProduct(product));
+        product.setId(rs.getLong("ID"));
+        product.setCode(rs.getString("CODE"));
+        product.setName(rs.getString("NAME"));
+        product.setBrand(BrandDao.findOneById(rs.getLong("BRAND_ID")));
+        product.setCategory(CategoryDao.findOneById(rs.getLong("CATEGORY_ID")));
+        product.setPrice(rs.getDouble("PRICE"));
+        product.setDiscount(rs.getInt("DISCOUNT"));
+        product.setDescription(rs.getString("DESCRIPTION"));
+        product.setThumbnail(rs.getString("THUMBNAIL"));
+        product.setTotalReviews(rs.getInt("TOTAL_REVIEW"));
+        product.setTotalStars(rs.getInt("TOTAL_STAR"));
+        product.setCreatedDate(rs.getTimestamp("CREATED_DATE"));
+        product.setCreatedBy(rs.getString("CREATED_BY"));
+        product.setModifiedDate(rs.getTimestamp("MODIFIED_DATE"));
+        product.setModifiedBy(rs.getString("MODIFIED_BY"));
+        product.setImages(ImageDao.findByProductId(product.getId()));
         return product;
     }
 }

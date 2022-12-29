@@ -1,8 +1,7 @@
 package controller;
 
+import Services.LoginService;
 import Services.RegisterService;
-import beans.Register;
-import dao.AccountDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,15 +16,22 @@ public class ConfirmController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+        LoginService.login(request, response);
+        long id = Long.parseLong(request.getParameter("id"));
         String token = request.getParameter("token");
-        RegisterService.updateStateRegister(id, token);
+        boolean confirm = RegisterService.confirmRegister(id, token);
         String message = "";
         String href = "";
         String hrefName = "";
-        message = "Chúc mừng bạn đăng ký thành công, ";
-        href = "login";
-        hrefName = "Đăng nhập ngay";
+        if(confirm) {
+            message = "Chúc mừng bạn đăng ký thành công, ";
+            href = "login";
+            hrefName = "Đăng nhập ngay";
+        } else {
+            message = "Link sai hoặc quá hạn, ";
+            href = "register";
+            hrefName = "Đăng ký ngay";
+        }
         request.setAttribute("message", message);
         request.setAttribute("href", href);
         request.setAttribute("hrefName", hrefName);

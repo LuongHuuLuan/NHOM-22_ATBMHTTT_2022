@@ -1,6 +1,6 @@
 package api;
 
-import beans.Account;
+import model.Account;
 import dao.AccountDao;
 import com.google.gson.Gson;
 

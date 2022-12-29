@@ -1,6 +1,6 @@
 package Services;
 
-import beans.Account;
+import model.Account;
 import dao.AccountDao;
 
 import java.util.Random;

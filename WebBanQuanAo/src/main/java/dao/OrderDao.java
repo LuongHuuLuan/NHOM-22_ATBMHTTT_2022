@@ -1,41 +1,25 @@
 package dao;
 
-import beans.Account;
-import beans.Color;
-import beans.Order;
-import beans.OrderItem;
+import mapper.CartMapper;
+import mapper.OrderMapper;
+import mapper.RoleMapper;
+import model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDao {
-    public static List<Order> getAllOrder() {
-        String sql = "SELECT * FROM HOADON";
+
+    public static List<Order> findAll() {
         List<Order> orders = new ArrayList<>();
         Connection connection = Connect.getInstance().getConnection();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            String query = "SELECT * FROM orders";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Order order = new Order();
-                int orderID = resultSet.getInt("MA_HOA_DON");
-                Account account = AccountDao.findOneById(resultSet.getInt("MA_TK"));
-                String address = resultSet.getString("DIA_CHI_GH");
-                String phone = resultSet.getString("SDT");
-                String receiver = resultSet.getString("NGUOI_NHAN");
-                Timestamp date = resultSet.getTimestamp("NGAY_THEM");
-                double price = resultSet.getDouble("THANH_TIEN");
-                String status = resultSet.getString("TRANG_THAI");
-                order.setOrderID(orderID);
-                order.setAccount(account);
-                order.setAddress(address);
-                order.setPhone(phone);
-                order.setReceiver(receiver);
-                order.setDate(date);
-                order.setPrice(price);
-                order.setStatus(status);
-                order.setOrderItems(OrderItemDao.getItems(orderID));
+                Order order = OrderMapper.mapRow(resultSet);
                 orders.add(order);
             }
             resultSet.close();
@@ -46,83 +30,76 @@ public class OrderDao {
         return orders;
     }
 
-    public static Order getOrder(int id) {
-        String sql = "SELECT * FROM HOADON WHERE MA_HOA_DON = ?";
+    public static Order findOneByAccount(Account account) {
         Connection connection = Connect.getInstance().getConnection();
+        Order order = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
+            String query = "SELECT * FROM orders WHERE ACCOUNT_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, account.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Order order = new Order();
-                int orderID = resultSet.getInt("MA_HOA_DON");
-                Account account = AccountDao.findOneById(resultSet.getInt("MA_TK"));
-                String address = resultSet.getString("DIA_CHI_GH");
-                String phone = resultSet.getString("SDT");
-                String receiver = resultSet.getString("NGUOI_NHAN");
-                Timestamp date = resultSet.getTimestamp("NGAY_THEM");
-                double price = resultSet.getDouble("THANH_TIEN");
-                String status = resultSet.getString("TRANG_THAI");
-                order.setOrderID(orderID);
-                order.setAccount(account);
-                order.setAddress(address);
-                order.setPhone(phone);
-                order.setReceiver(receiver);
-                order.setDate(date);
-                order.setPrice(price);
-                order.setStatus(status);
-                order.setOrderItems(OrderItemDao.getItems(orderID));
-                return order;
+                order = OrderMapper.mapRow(resultSet);
+                break;
             }
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return order;
     }
 
-    public static boolean deleteOrder(int id) {
-        Order order = getOrder(id);
-        if (order != null) {
-            for (OrderItem orderItem : order.getOrderItems()) {
-                OrderItemDao.deleteItem(orderItem.getOrderID());
-            }
-        }
+    public static Order findOneById(long id) {
         Connection connection = Connect.getInstance().getConnection();
-        String sql = "DELETE FROM HOADON WHERE MA_HOA_DON=?";
-        PreparedStatement preparedStatement = null;
+        Order order = null;
         try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            int rowEffects = preparedStatement.executeUpdate();
-            if (rowEffects > 0) {
-                return true;
+            String query = "SELECT * FROM orders WHERE ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                order = OrderMapper.mapRow(resultSet);
+                break;
             }
+            resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return order;
     }
 
-    public static boolean updateStatus(int id, String status) {
+    public static boolean delete(long id) {
+        OrderItemDao.delete(id);
+        String sql = "DELETE FROM orders WHERE ID = ?";
         Connection connection = Connect.getInstance().getConnection();
-        String sql = "UPDATE HOADON SET TRANG_THAI = ? WHERE MA_HOA_DON = ?";
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);
-            preparedStatement.setInt(2, id);
-            int rowEffects = preparedStatement.executeUpdate();
-            if (rowEffects > 0) {
-                return true;
-            }
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            int resultSet = preparedStatement.executeUpdate();
             preparedStatement.close();
+            return resultSet != -1;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
+    }
+
+    public static boolean update(Order order) {
+        String sql = "UPDATE orders SET STATUS_ID = ? WHERE ID = ?";
+        Connection connection = Connect.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, order.getStatus().getId());
+            preparedStatement.setLong(2, order.getId());
+            int resultSet = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return resultSet != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

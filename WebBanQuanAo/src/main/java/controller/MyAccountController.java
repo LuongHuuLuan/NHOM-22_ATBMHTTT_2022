@@ -1,8 +1,8 @@
 package controller;
 
 import Services.AccountServices;
-import Services.HashService;
-import beans.Account;
+import Services.LoginService;
+import model.Account;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,6 +25,7 @@ public class MyAccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        LoginService.login(request, response);
         Account account = (Account) session.getAttribute("account");
         if (account != null) {
             String type = request.getParameter("type");
@@ -38,17 +39,16 @@ public class MyAccountController extends HttpServlet {
                 account.setLastName(lastName);
                 account.setFirstName(firstName);
                 account.setEmail(email);
-                account.setPhoneNumber(sdt);
+                account.setPhone(sdt);
                 account.setAddress(address);
-
                 AccountServices.update(account, false);
             } else if (type.equals("changePass")) {
                 String password = request.getParameter("password");
                 String newPass = request.getParameter("newpass");
 
-                Account accountWithNewPass = AccountServices.getAccount(account.getUserName(), password, true);
+                Account accountWithNewPass = AccountServices.getAccount(account.getUsername(), password, true);
                 if (account != null) {
-                    accountWithNewPass.setPassWord(newPass);
+                    accountWithNewPass.setPassword(newPass);
                     AccountServices.update(accountWithNewPass, true);
                 }
             }

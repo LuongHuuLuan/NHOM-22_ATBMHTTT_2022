@@ -1,7 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- all js here -->
-<!-- jquery latest version -->
-<script src='<c:url value="/assets/js/vendor/jquery-1.12.0.min.js"/>'></script>
 <!-- bootstrap js -->
 <script src='<c:url value="/assets/js/bootstrap.min.js"/>'></script>
 <!-- parallax js -->
@@ -27,4 +25,3 @@
 <!-- main js -->
 <script src='<c:url value="/assets/js/main.js"/>'></script>
 <script src='<c:url value="/assets/js/validation.js"/>'></script>
-<script src='<c:url value="/assets/js/addToCard.js"/>'></script>

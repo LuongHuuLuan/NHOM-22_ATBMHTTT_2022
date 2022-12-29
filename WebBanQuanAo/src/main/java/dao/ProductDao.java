@@ -4,19 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import beans.Color;
-import beans.Image;
-import beans.Product;
-import beans.ProductNew;
-import beans.Size;
-import beans.Tag;
+import model.Product;
 import mapper.ProductMapper;
-import mapper.SizeMapper;
-import object_reponse.InfoDelete;
 import page.Pageable;
 import sort.SortProduct;
 
@@ -27,7 +18,7 @@ public class ProductDao {
         List<Product> products = new ArrayList<>();
         Connection connection = Connect.getInstance().getConnection();
         try {
-            String query = "SELECT * FROM sanpham";
+            String query = "SELECT * FROM product";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -48,48 +39,48 @@ public class ProductDao {
         try {
             String query = "";
             SortProduct sortProduct = pageable.getSortProduct();
-            if (sortProduct.getColor() == null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                query = "SELECT sanpham.* FROM sanpham WHERE MA_NHAN_HIEU = ?";
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() == null) {
-                query = "SELECT sanpham.* FROM (sanpham LEFT JOIN mau ON sanpham.MA_SP = mau.MA_SP) LEFT JOIN chitietmau ON mau.MA_CT_MAU = chitietmau.MA_CT_MAU WHERE mau.MA_CT_MAU = ?";
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                query = "SELECT sanpham.* FROM (sanpham LEFT JOIN the ON sanpham.MA_SP = the.MA_SP) LEFT JOIN chitietthe ON the.MA_CT_THE = chitietthe.MA_CT_THE WHERE the.MA_CT_THE = ?";
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() != null) {
-                query = "SELECT sanpham.* FROM (sanpham LEFT JOIN the ON sanpham.MA_SP = the.MA_SP) LEFT JOIN chitietthe ON the.MA_CT_THE = chitietthe.MA_CT_THE WHERE sanpham.MA_NHAN_HIEU = ? AND the.MA_CT_THE = ?";
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                query = "SELECT sanpham.* FROM (sanpham LEFT JOIN mau ON sanpham.MA_SP = mau.MA_SP) LEFT JOIN chitietmau ON mau.MA_CT_MAU = chitietmau.MA_CT_MAU WHERE sanpham.MA_NHAN_HIEU = ? AND mau.MA_CT_MAU = ?";
-            } else if (sortProduct.getColor() != null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                query = "SELECT sanpham.* FROM (sanpham LEFT JOIN (mau LEFT JOIN chitietmau ON mau.MA_CT_MAU = chitietmau.MA_CT_MAU) ON sanpham.MA_SP = mau.MA_SP) LEFT JOIN (the LEFT JOIN chitietthe ON the.MA_CT_THE = chitietthe.MA_CT_THE) ON sanpham.MA_SP = the.MA_SP WHERE chitietmau.MA_CT_MAU = ? AND chitietthe.MA_CT_THE = ?";
-            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getType() != null) {
-                query = "SELECT sanpham.* FROM (sanpham LEFT JOIN the ON sanpham.MA_SP = the.MA_SP) LEFT JOIN mau ON sanpham.MA_SP = mau.MA_SP WHERE sanpham.MA_NHAN_HIEU = ? AND the.MA_CT_THE = ? AND mau.MA_CT_MAU = ?";
+            if (sortProduct.getColor() == null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                query = "SELECT product.* FROM product WHERE BRAND_ID = ?";
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() == null) {
+                query = "SELECT PRODUCT.* FROM product WHERE product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                query = "SELECT product.* FROM product WHERE CATEGORY_ID = ?";
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() != null) {
+                query = "SELECT product.* FROM product WHERE CATEGORY_ID = ? AND BRAND_ID = ?";
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                query = "SELECT PRODUCT.* FROM product WHERE product.BRAND_ID = ? AND product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                query = "SELECT PRODUCT.* FROM product WHERE product.CATEGORY_ID = ? AND product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
+            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getCategory() != null) {
+                query = "SELECT PRODUCT.* FROM product WHERE product.BRAND_ID = ? AND product.CATEGORY_ID = ? AND product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
             } else {
-                query = "SELECT  * FROM sanpham";
+                query = "SELECT  * FROM product";
             }
             if (pageable.getSortProduct().getOrderType() != null) {
-                query += " ORDER BY sanpham.gia " + pageable.getSortProduct().getOrderType() + " LIMIT " + (pageable.getPage() - 1) + ", " + pageable.getMaxItem();
+                query += " ORDER BY product.price " + pageable.getSortProduct().getOrderType() + " LIMIT " + (pageable.getPage() - 1) + ", " + pageable.getMaxItem();
             } else {
                 query += " LIMIT " + (pageable.getPage() - 1) + ", " + pageable.getMaxItem();
             }
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            if (sortProduct.getColor() == null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() == null) {
-                preparedStatement.setString(1, sortProduct.getColor());
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                preparedStatement.setString(1, sortProduct.getType());
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-                preparedStatement.setString(2, sortProduct.getType());
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-                preparedStatement.setString(2, sortProduct.getColor());
-            } else if (sortProduct.getColor() != null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                preparedStatement.setString(1, sortProduct.getColor());
-                preparedStatement.setString(2, sortProduct.getType());
-            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getType() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-                preparedStatement.setString(2, sortProduct.getType());
-                preparedStatement.setString(3, sortProduct.getColor());
+            if (sortProduct.getColor() == null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                preparedStatement.setLong(1, sortProduct.getBrand().getId());
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() == null) {
+                preparedStatement.setLong(1, sortProduct.getColor().getId());
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                preparedStatement.setLong(1, sortProduct.getCategory().getId());
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() != null) {
+                preparedStatement.setLong(1, sortProduct.getCategory().getId());
+                preparedStatement.setLong(2, sortProduct.getBrand().getId());
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                preparedStatement.setLong(1, sortProduct.getBrand().getId());
+                preparedStatement.setLong(2, sortProduct.getColor().getId());
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                preparedStatement.setLong(1, sortProduct.getCategory().getId());
+                preparedStatement.setLong(2, sortProduct.getColor().getId());
+            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getCategory() != null) {
+                preparedStatement.setLong(1, sortProduct.getBrand().getId());
+                preparedStatement.setLong(2, sortProduct.getCategory().getId());
+                preparedStatement.setLong(3, sortProduct.getColor().getId());
             }
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -104,13 +95,13 @@ public class ProductDao {
         return products;
     }
 
-    public static Product findOneById(String id) {
+    public static Product findOneById(long id) {
         Connection connection = Connect.getInstance().getConnection();
         Product product = null;
         try {
-            String query = "SELECT * FROM sanpham WHERE MA_SP = ?";
+            String query = "SELECT * FROM product WHERE ID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, id);
+            preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 product = ProductMapper.mapRow(resultSet);
@@ -124,78 +115,98 @@ public class ProductDao {
         return product;
     }
 
-    public static boolean add(Product product) {
-        String sql = "insert into sanpham (ma_sp, ten_sp, ma_nhan_hieu, gia, mo_ta, hinh_nho, nguoi_them) values (?, ?,?, ?, ?, ?, ?)";
+    public static Product findOneByCode(String code) {
         Connection connection = Connect.getInstance().getConnection();
+        Product product = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, product.getId());
-            preparedStatement.setString(2, product.getName());
-            preparedStatement.setString(3, product.getBrand().getId());
-            preparedStatement.setDouble(4, product.getPrice());
-            preparedStatement.setString(5, product.getDescription());
-            preparedStatement.setString(6, product.getThumbnail());
-            preparedStatement.setString(7, product.getCreateBy());
-            for (Size size : product.getSizes()) {
-                SizeDao.add(product, size);
+            String query = "SELECT * FROM product WHERE CODE = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, code);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                product = ProductMapper.mapRow(resultSet);
+                break;
             }
-            for (Tag tag : product.getTags()) {
-                TagDao.add(product, tag);
-            }
-            for (Color color : product.getColors()) {
-                ColorDao.add(product, color);
-            }
-            int resultSet = preparedStatement.executeUpdate();
+            resultSet.close();
             preparedStatement.close();
-            return resultSet == 1;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return product;
     }
 
-    public static boolean update(Product product) {
-        Connection connection = Connect.getInstance().getConnection();
-        String sql = null;
-        PreparedStatement prep = null;
-        try {
-            sql = "UPDATE SANPHAM SET TEN_SP = ?, MA_NHAN_HIEU = ?, GIA = ?, MO_TA = ?, HINH_NHO = ?, TONG_DANH_GIA =?, TONG_SAO = ?, SO_LUONG = ? WHERE MA_SP = ? ";
-            prep = connection.prepareStatement(sql);
-            prep.setString(1, product.getName());
-            prep.setString(2, product.getBrand().getId());
-            prep.setDouble(3, product.getPrice());
-            prep.setString(4, product.getDescription());
-            prep.setString(5, product.getThumbnail());
-            prep.setInt(6, product.getTotalReviews());
-            prep.setInt(7, product.getTotalStar());
-            prep.setInt(8, product.getAmount());
-            int res1 = prep.executeUpdate();
-            prep.close();
-            return res1 == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static boolean delete(String id) {
-        String sql = "DELETE FROM chitietkichthuoc WHERE ma_ct_kich_thuoc = ?";
-        Connection connection = Connect.getInstance().getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, id);
-            int resultSet = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return resultSet == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public static boolean add(Product product) {
+//        String sql = "insert into sanpham (ma_sp, ten_sp, ma_nhan_hieu, gia, mo_ta, hinh_nho, nguoi_them) values (?, ?,?, ?, ?, ?, ?)";
+//        Connection connection = Connect.getInstance().getConnection();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, product.getId());
+//            preparedStatement.setString(2, product.getName());
+//            preparedStatement.setString(3, product.getBrand().getId());
+//            preparedStatement.setDouble(4, product.getPrice());
+//            preparedStatement.setString(5, product.getDescription());
+//            preparedStatement.setString(6, product.getThumbnail());
+//            preparedStatement.setString(7, product.getCreateBy());
+//            for (Size size : product.getSizes()) {
+//                SizeDao.add(product, size);
+//            }
+//            for (Tag tag : product.getTags()) {
+//                CategoryDao.add(product, tag);
+//            }
+//            for (Color color : product.getColors()) {
+//                ColorDao.add(product, color);
+//            }
+//            int resultSet = preparedStatement.executeUpdate();
+//            preparedStatement.close();
+//            return resultSet == 1;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+//
+//    public static boolean update(Product product) {
+//        Connection connection = Connect.getInstance().getConnection();
+//        String sql = null;
+//        PreparedStatement prep = null;
+//        try {
+//            sql = "UPDATE SANPHAM SET TEN_SP = ?, MA_NHAN_HIEU = ?, GIA = ?, MO_TA = ?, HINH_NHO = ?, TONG_DANH_GIA =?, TONG_SAO = ?, SO_LUONG = ? WHERE MA_SP = ? ";
+//            prep = connection.prepareStatement(sql);
+//            prep.setString(1, product.getName());
+//            prep.setString(2, product.getBrand().getId());
+//            prep.setDouble(3, product.getPrice());
+//            prep.setString(4, product.getDescription());
+//            prep.setString(5, product.getThumbnail());
+//            prep.setInt(6, product.getTotalReviews());
+//            prep.setInt(7, product.getTotalStar());
+//            prep.setInt(8, product.getAmount());
+//            int res1 = prep.executeUpdate();
+//            prep.close();
+//            return res1 == 1;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+//
+//    public static boolean delete(long id) {
+//        String sql = "DELETE FROM product WHERE ma_ct_kich_thuoc = ?";
+//        Connection connection = Connect.getInstance().getConnection();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, id);
+//            int resultSet = preparedStatement.executeUpdate();
+//            preparedStatement.close();
+//            return resultSet == 1;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     public static int count() {
         Connection connection = Connect.getInstance().getConnection();
-        String sql = "SELECT count(*) from sanpham";
+        String sql = "SELECT count(product.ID) from product";
         int result = 0;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -217,43 +228,43 @@ public class ProductDao {
         try {
             String query = "";
             SortProduct sortProduct = pageable.getSortProduct();
-            if (sortProduct.getColor() == null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                query = "SELECT count(sanpham.ma_sp) FROM sanpham WHERE MA_NHAN_HIEU = ?";
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() == null) {
-                query = "SELECT count(sanpham.ma_sp) FROM (sanpham LEFT JOIN mau ON sanpham.MA_SP = mau.MA_SP) LEFT JOIN chitietmau ON mau.MA_CT_MAU = chitietmau.MA_CT_MAU WHERE mau.MA_CT_MAU = ?";
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                query = "SELECT count(sanpham.ma_sp) FROM (sanpham LEFT JOIN the ON sanpham.MA_SP = the.MA_SP) LEFT JOIN chitietthe ON the.MA_CT_THE = chitietthe.MA_CT_THE WHERE the.MA_CT_THE = ?";
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() != null) {
-                query = "SELECT count(sanpham.ma_sp) FROM (sanpham LEFT JOIN the ON sanpham.MA_SP = the.MA_SP) LEFT JOIN chitietthe ON the.MA_CT_THE = chitietthe.MA_CT_THE WHERE sanpham.MA_NHAN_HIEU = ? AND the.MA_CT_THE = ?";
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                query = "SELECT count(sanpham.ma_sp) FROM (sanpham LEFT JOIN mau ON sanpham.MA_SP = mau.MA_SP) LEFT JOIN chitietmau ON mau.MA_CT_MAU = chitietmau.MA_CT_MAU WHERE sanpham.MA_NHAN_HIEU = ? AND mau.MA_CT_MAU = ?";
-            } else if (sortProduct.getColor() != null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                query = "SELECT count(sanpham.ma_sp) FROM (sanpham LEFT JOIN (mau LEFT JOIN chitietmau ON mau.MA_CT_MAU = chitietmau.MA_CT_MAU) ON sanpham.MA_SP = mau.MA_SP) LEFT JOIN (the LEFT JOIN chitietthe ON the.MA_CT_THE = chitietthe.MA_CT_THE) ON sanpham.MA_SP = the.MA_SP WHERE chitietmau.MA_CT_MAU = ? AND chitietthe.MA_CT_THE = ?";
-            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getType() != null) {
-                query = "SELECT count(sanpham.ma_sp) FROM (sanpham LEFT JOIN the ON sanpham.MA_SP = the.MA_SP) LEFT JOIN mau ON sanpham.MA_SP = mau.MA_SP WHERE sanpham.MA_NHAN_HIEU = ? AND the.MA_CT_THE = ? AND mau.MA_CT_MAU = ?";
+            if (sortProduct.getColor() == null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                query = "SELECT count(product.ID) FROM product WHERE BRAND_ID = ?";
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() == null) {
+                query = "SELECT count(product.ID) FROM product WHERE product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                query = "SELECT count(product.ID) FROM product WHERE CATEGORY_ID = ?";
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() != null) {
+                query = "SELECT count(product.ID) FROM product WHERE CATEGORY_ID = ? AND BRAND_ID = ?";
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                query = "SELECT count(product.ID) FROM product WHERE product.BRAND_ID = ? AND product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                query = "SELECT count(product.ID) FROM product WHERE product.CATEGORY_ID = ? AND product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
+            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getCategory() != null) {
+                query = "SELECT count(product.ID) FROM product WHERE product.BRAND_ID = ? AND product.CATEGORY_ID = ? AND product.ID IN (SELECT DISTINCT warehouse.PRODUCT_ID FROM warehouse WHERE warehouse.COLOR_ID = ?)";
             } else {
-                query = "SELECT count(sanpham.ma_sp) FROM sanpham";
+                query = "SELECT count(product.ID) FROM product";
             }
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            if (sortProduct.getColor() == null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() == null) {
-                preparedStatement.setString(1, sortProduct.getColor());
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                preparedStatement.setString(1, sortProduct.getType());
-            } else if (sortProduct.getColor() == null && sortProduct.getType() != null && sortProduct.getBrand() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-                preparedStatement.setString(2, sortProduct.getType());
-            } else if (sortProduct.getColor() != null && sortProduct.getType() == null && sortProduct.getBrand() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-                preparedStatement.setString(2, sortProduct.getColor());
-            } else if (sortProduct.getColor() != null && sortProduct.getType() != null && sortProduct.getBrand() == null) {
-                preparedStatement.setString(1, sortProduct.getColor());
-                preparedStatement.setString(2, sortProduct.getType());
-            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getType() != null) {
-                preparedStatement.setString(1, sortProduct.getBrand());
-                preparedStatement.setString(2, sortProduct.getType());
-                preparedStatement.setString(3, sortProduct.getColor());
+            if (sortProduct.getColor() == null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                preparedStatement.setLong(1, sortProduct.getBrand().getId());
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() == null) {
+                preparedStatement.setLong(1, sortProduct.getColor().getId());
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                preparedStatement.setLong(1, sortProduct.getCategory().getId());
+            } else if (sortProduct.getColor() == null && sortProduct.getCategory() != null && sortProduct.getBrand() != null) {
+                preparedStatement.setLong(1, sortProduct.getCategory().getId());
+                preparedStatement.setLong(2, sortProduct.getBrand().getId());
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() == null && sortProduct.getBrand() != null) {
+                preparedStatement.setLong(1, sortProduct.getBrand().getId());
+                preparedStatement.setLong(2, sortProduct.getColor().getId());
+            } else if (sortProduct.getColor() != null && sortProduct.getCategory() != null && sortProduct.getBrand() == null) {
+                preparedStatement.setLong(1, sortProduct.getCategory().getId());
+                preparedStatement.setLong(2, sortProduct.getColor().getId());
+            } else if (sortProduct.getBrand() != null && sortProduct.getColor() != null && sortProduct.getCategory() != null) {
+                preparedStatement.setLong(1, sortProduct.getBrand().getId());
+                preparedStatement.setLong(2, sortProduct.getCategory().getId());
+                preparedStatement.setLong(3, sortProduct.getColor().getId());
             }
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {

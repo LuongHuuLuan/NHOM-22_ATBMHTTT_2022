@@ -11,11 +11,13 @@ public class LogoutController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("account");
+        session.removeAttribute("cart");
         Cookie[] cookies = request.getCookies();
         for (Cookie c : cookies) {
-            if (c.getName().equals("username") || c.getName().equals("password") || c.getName().equals("idUser")) {
+            if (c.getName().equals("WBHReLoginToken")) {
                 c.setMaxAge(0);
                 response.addCookie(c);
+                break;
             }
         }
         response.sendRedirect("login");
