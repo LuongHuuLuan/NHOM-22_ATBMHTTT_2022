@@ -44,7 +44,7 @@ public class Hash {
 		if (f.exists()) {
 			try {
 				DigestInputStream dis = new DigestInputStream(new BufferedInputStream(new FileInputStream(f)), md);
-				int i;
+				int i=0;
 				byte[] buff = new byte[1024];
 				do {
 					i = dis.read(buff);

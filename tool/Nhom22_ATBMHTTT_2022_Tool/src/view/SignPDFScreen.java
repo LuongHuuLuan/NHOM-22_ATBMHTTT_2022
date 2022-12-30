@@ -3,7 +3,13 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -54,7 +60,7 @@ public class SignPDFScreen extends JPanel {
 		lblNewLabel.setBounds(381, 81, 373, 14);
 		add(lblNewLabel);
 
-		JButton btnNewButton_1_1 = new JButton("Import thông tin chữ ký");
+		JButton btnNewButton_1_1 = new JButton("Import khóa riêng tư");
 		btnNewButton_1_1.setBounds(67, 153, 180, 23);
 		add(btnNewButton_1_1);
 		btnNewButton_1_1.addActionListener(new ActionListener() {
@@ -80,14 +86,39 @@ public class SignPDFScreen extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				saveFile();
+				try {
+					saveFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				}
 			}
 		});
 		btnNewButton_2.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				sign();
+				try {
+					sign();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				} catch (InvalidKeyException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				} catch (InvalidKeySpecException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				} catch (NoSuchAlgorithmException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				} catch (IllegalBlockSizeException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				} catch (BadPaddingException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				}
 			}
 		});
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -105,24 +136,28 @@ public class SignPDFScreen extends JPanel {
 	void loadFile(String type) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.showOpenDialog(this);
-		File file = fileChooser.getSelectedFile();
-		JOptionPane optionPane = new JOptionPane();
-		String extFile = file.getName().split("\\.")[1];
-		if (extFile.equals("pdf") && type.equals(LOAD_PDF)) {
-			lblNewLabel.setText(file.getName());
-			pathPDF = file.getAbsolutePath();
-			optionPane.showMessageDialog(this, "ĐÃ LOAD FILE");
-		} else if (type.equals(LOAD_SIGN)) {
-			lblNewLabel_1.setText(file.getName());
-			pathSign = file.getAbsolutePath();
-			optionPane.showMessageDialog(this, "ĐÃ LOAD FILE");
-		} else {
-			optionPane.showMessageDialog(this, "FILE ĐƯỢC CHỌN KHÔNG PHẢI FILE PDF");
+		try {
+			File file = fileChooser.getSelectedFile();
+			JOptionPane optionPane = new JOptionPane();
+			String extFile = file.getName().split("\\.")[1];
+			if (extFile.equals("pdf") && type.equals(LOAD_PDF)) {
+				lblNewLabel.setText(file.getName());
+				pathPDF = file.getAbsolutePath();
+				optionPane.showMessageDialog(this, "ĐÃ LOAD FILE");
+			} else if (type.equals(LOAD_SIGN)) {
+				lblNewLabel_1.setText(file.getName());
+				pathSign = file.getAbsolutePath();
+				optionPane.showMessageDialog(this, "ĐÃ LOAD FILE");
+			} else {
+				optionPane.showMessageDialog(this, "FILE ĐƯỢC CHỌN KHÔNG PHẢI FILE PDF");
+			}
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(getParent(), e.getMessage());
 		}
 	}
 
 	// save file after signed
-	void saveFile() {
+	void saveFile() throws IOException {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.showSaveDialog(this);
 		String path = fileChooser.getCurrentDirectory() + "\\" + fileChooser.getSelectedFile().getName();
@@ -131,7 +166,8 @@ public class SignPDFScreen extends JPanel {
 	}
 
 	// sign on file PDF (attachment a file)
-	void sign() {
+	void sign() throws IOException, InvalidKeyException, InvalidKeySpecException, NoSuchAlgorithmException,
+			IllegalBlockSizeException, BadPaddingException {
 		if (pathPDF == null || pathSign == null) {
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn đầy đủ");
 		} else {
