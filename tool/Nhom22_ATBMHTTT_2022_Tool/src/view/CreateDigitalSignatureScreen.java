@@ -1,35 +1,33 @@
 package view;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Base64;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import controller.Hash;
 import controller.Key;
 import controller.RSA;
 import controller.Support;
-
-import javax.swing.border.LineBorder;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import java.awt.SystemColor;
-import javax.swing.JScrollPane;
-import java.awt.event.ActionListener;
-import java.util.Base64;
-import java.awt.event.ActionEvent;
-import javax.swing.border.EtchedBorder;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
+import heppers.Constants;
 
 public class CreateDigitalSignatureScreen extends JPanel {
 	private Key key = new Key();
@@ -114,7 +112,7 @@ public class CreateDigitalSignatureScreen extends JPanel {
 
 		JComboBox comboBox = new JComboBox();
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "512", "1024", "2028", "3072", "4096" }));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "512", "1024", "2048", "4096" }));
 		comboBox.setBounds(124, 36, 94, 27);
 		panel_1.add(comboBox);
 
@@ -126,8 +124,11 @@ public class CreateDigitalSignatureScreen extends JPanel {
 		JButton btnKhoaCongKhai = new JButton("Thêm File");
 		btnKhoaCongKhai.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Long a line here
+				int keySize = Integer.parseInt((String) comboBox.getItemAt(comboBox.getSelectedIndex()));
+				//done
 				support.workWithJchooseFile(e, textField_UserName, textField_Email, textField_Phone,
-						textAreaKhoaCongKhai, textAreaKhoaBiMat, "PUBLIC_KEY");
+						textAreaKhoaCongKhai, textAreaKhoaBiMat, Constants.PUBLIC_KEY, keySize);
 			}
 		});
 		btnKhoaCongKhai.setFocusPainted(false);
@@ -156,8 +157,11 @@ public class CreateDigitalSignatureScreen extends JPanel {
 		JButton btnKhoaBiMat = new JButton("Thêm File");
 		btnKhoaBiMat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Long a line here
+				int keySize = Integer.parseInt((String) comboBox.getItemAt(comboBox.getSelectedIndex()));
+				//done
 				support.workWithJchooseFile(e, textField_UserName, textField_Email, textField_Phone,
-						textAreaKhoaCongKhai, textAreaKhoaBiMat, "PRIVATE_KEY");
+						textAreaKhoaCongKhai, textAreaKhoaBiMat, Constants.PRIVATE_KEY, keySize);
 			}
 		});
 		btnKhoaBiMat.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -262,8 +266,11 @@ public class CreateDigitalSignatureScreen extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (!textField_UserName.getText().equals("") & !textField_Email.getText().equals("") & !textField_Phone.getText().equals("")
 						& !textAreaKhoaCongKhai.getText().equals("") & !textAreaKhoaBiMat.getText().equals("")) {
+					//Long a line here
+					int keySize = Integer.parseInt((String) comboBox.getItemAt(comboBox.getSelectedIndex()));
+					//done
 					support.workWithJchooseFile(e, textField_UserName, textField_Email, textField_Phone,
-							textAreaKhoaCongKhai, textAreaKhoaBiMat, null);
+							textAreaKhoaCongKhai, textAreaKhoaBiMat, null, keySize);
 				} else {
 					JOptionPane.showMessageDialog(frame, "Thiếu thông tin!", "Có lỗi rồi bạn ơi!",
 							JOptionPane.ERROR_MESSAGE);

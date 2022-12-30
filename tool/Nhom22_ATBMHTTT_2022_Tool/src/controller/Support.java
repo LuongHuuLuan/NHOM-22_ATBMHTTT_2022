@@ -1,13 +1,9 @@
 package controller;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -19,12 +15,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import heppers.Constants;
+
 public class Support {
 	private JFrame frame = new JFrame();
-	private Hash hash = new Hash("SHA-256");
+	private Hash hash = new Hash(Constants.SHA_256);
 
 	public void workWithJchooseFile(ActionEvent e, JTextField userName, JTextField email, JTextField phone,
-			JTextArea pub, JTextArea pri, String typeKey) {
+			JTextArea pub, JTextArea pri, String typeKey, int keySize) {
 		String com = ((ActionEvent) e).getActionCommand();
 
 		if (com.equals("Khởi tạo file chữ kí")) {
@@ -33,32 +34,36 @@ public class Support {
 			int option = fileChooser.showSaveDialog(frame);
 			if (option == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
-				save(file.getAbsolutePath() + "\\" + "PublicKeyAndDigitalSignature.json", userName, email, phone, pub, "PUBLIC_KEY");
-				save(file.getAbsolutePath() + "\\" + "PrivateKeyAndDigitalSignature.json", userName, email, phone, pri, "PRIVATE_KEY");
+				save(file.getAbsolutePath() + "\\" + "PublicKeyAndDigitalSignature.json", userName, email, phone, pub,
+						Constants.PUBLIC_KEY, keySize);
+				save(file.getAbsolutePath() + "\\" + "PrivateKeyAndDigitalSignature.json", userName, email, phone, pri,
+						Constants.PRIVATE_KEY, keySize);
 			}
 		} else {
 			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 			int r = j.showOpenDialog(null);
 			if (r == JFileChooser.APPROVE_OPTION) {
-				if (typeKey.equalsIgnoreCase("PUBLIC_KEY")) {
-				read(j.getSelectedFile(), pub);
-				} else read(j.getSelectedFile(), pri);
+				if (typeKey.equalsIgnoreCase(Constants.PUBLIC_KEY)) {
+					read(j.getSelectedFile(), pub);
+				} else
+					read(j.getSelectedFile(), pri);
 			}
 		}
 	}
 
 	public void save(String fileName, JTextField userName, JTextField email, JTextField phone, JTextArea key,
-			String typeKey) {
+			String typeKey, int keySize) {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("userName", hash.hash(userName.getText().trim()));
 			json.put("email", hash.hash(email.getText().trim()));
 			json.put("phone", hash.hash(phone.getText().trim()));
-			if (typeKey.equalsIgnoreCase("PUBLIC_KEY")) {
+			if (typeKey.equalsIgnoreCase(Constants.PUBLIC_KEY)) {
 				json.put("publicKey", key.getText().trim());
-			} else if (typeKey.equalsIgnoreCase("PRIVATE_KEY")) {
+			} else if (typeKey.equalsIgnoreCase(Constants.PRIVATE_KEY)) {
 				json.put("privateKey", key.getText().trim());
 			}
+			json.put("keySize", keySize);
 //			json.put("phone", List.of("Mountain View", "Los Angeles", "New York"));
 		} catch (JSONException e) {
 			JOptionPane.showMessageDialog(frame, "Lỗi: " + e.getMessage(), "Có lỗi rồi bạn ơi!",
