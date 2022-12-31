@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -44,7 +45,7 @@ public class SignFileService {
 
 	// sign on file (attachment file encrypt)
 	public void sign(String pathPDF, String pathPriKey) throws IOException, InvalidKeySpecException,
-			NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+			NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
 		// read file private key by format JSON
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(pathPriKey));
 		String jsonString = "";

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.BadPaddingException;
@@ -118,6 +119,9 @@ public class SignPDFScreen extends JPanel {
 				} catch (BadPaddingException e1) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				} catch (NoSuchProviderException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
 				}
 			}
 		});
@@ -167,7 +171,7 @@ public class SignPDFScreen extends JPanel {
 
 	// sign on file PDF (attachment a file)
 	void sign() throws IOException, InvalidKeyException, InvalidKeySpecException, NoSuchAlgorithmException,
-			IllegalBlockSizeException, BadPaddingException {
+			IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
 		if (pathPDF == null || pathSign == null) {
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn đầy đủ");
 		} else {
