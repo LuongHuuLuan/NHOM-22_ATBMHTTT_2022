@@ -32,15 +32,16 @@ public class CartItemDao {
         return items;
     }
 
-    public static CartItem findByProductIdAndColorIdAndSizeId(long productId, long colorId, long sizeId) {
+    public static CartItem findByCartIdProductIdAndColorIdAndSizeId(long cartId, long productId, long colorId, long sizeId) {
         Connection connection = Connect.getInstance().getConnection();
         CartItem item = null;
         try {
-            String query = "SELECT * FROM cart_detail WHERE PRODUCT_ID = ? AND COLOR_ID = ? AND SIZE_ID = ?";
+            String query = "SELECT * FROM cart_detail WHERE CART_ID = ? AND PRODUCT_ID = ? AND COLOR_ID = ? AND SIZE_ID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, productId);
-            preparedStatement.setLong(2, colorId);
-            preparedStatement.setLong(3, sizeId);
+            preparedStatement.setLong(1, cartId);
+            preparedStatement.setLong(2, productId);
+            preparedStatement.setLong(3, colorId);
+            preparedStatement.setLong(4, sizeId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 item = CartItemMapper.mapRow(resultSet);

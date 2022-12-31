@@ -102,4 +102,29 @@ public class OrderDao {
         }
     }
 
+    public static long add(Order order) {
+        String sql = "INSERT INTO orders(ACCOUNT_ID, RECIPIENT, ORDERS_PHONE, ORDERS_ADDRESS) VALUES(?, ?, ?, ?);";
+        Connection connection = Connect.getInstance().getConnection();
+        long id = -1;
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setLong(1, order.getAccount().getId());
+            preparedStatement.setString(2, order.getRecipient());
+            preparedStatement.setString(3, order.getOrderPhone());
+            preparedStatement.setString(4, order.getOrderAddress());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                id = resultSet.getInt(1);
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
 }

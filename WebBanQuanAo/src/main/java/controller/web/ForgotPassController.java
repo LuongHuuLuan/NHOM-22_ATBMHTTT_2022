@@ -1,4 +1,4 @@
-package controller;
+package controller.web;
 
 import Services.ForgotPasswordService;
 import Services.LoginService;
@@ -25,6 +25,5 @@ public class ForgotPassController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         ForgotPasswordService.verifyForgotPassword(email.trim());
-
     }
 }

@@ -7,18 +7,20 @@ import java.util.List;
 
 public class OrderServices {
 
+    public static boolean add(Order order) {
+        long orderId = OrderDao.add(order);
+        return orderId != -1;
+    }
+
     public static List<Order> getAll() {
-//        return OrderDao.getAllOrder();
-        return null;
+        return OrderDao.findAll();
     }
 
-    public static  boolean deleteOrder(int id) {
-//        return OrderDao.deleteOrder(id);
-        return false;
+    public static boolean deleteOrder(long id) {
+        return OrderDao.delete(id);
     }
 
-    public static  boolean updateStatus(int id, String status) {
-//        return OrderDao.updateStatus(id, status);
+    public static boolean updateStatus(long id, String status) {
         return false;
     }
 

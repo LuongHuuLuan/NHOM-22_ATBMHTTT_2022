@@ -12,6 +12,7 @@ public class StatusMapper {
         status.setCode(rs.getString("CODE"));
         status.setName(rs.getString("NAME"));
         status.setDescription(rs.getString("DESCRIPTION"));
+        status.setStatusGroup(rs.getString("STATUS_GROUP"));
         status.setCreatedDate(rs.getTimestamp("CREATED_DATE"));
         status.setCreatedBy(rs.getString("CREATED_BY"));
         status.setModifiedDate(rs.getTimestamp("MODIFIED_DATE"));

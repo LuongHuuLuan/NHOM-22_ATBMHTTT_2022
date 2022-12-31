@@ -6,8 +6,6 @@ import model.Cart;
 import model.CartItem;
 import dao.CartDao;
 
-import java.util.List;
-
 public class CartService {
     public static Cart getCart(Account account) {
         Cart cart = CartDao.findOneByAccount(account);
@@ -21,7 +19,7 @@ public class CartService {
     }
 
     public static int addItem(CartItem item) {
-        CartItem existItem = CartItemDao.findByProductIdAndColorIdAndSizeId(item.getProduct().getId(), item.getColor().getId(), item.getSize().getId());
+        CartItem existItem = CartItemDao.findByCartIdProductIdAndColorIdAndSizeId(item.getCartId(), item.getProduct().getId(), item.getColor().getId(), item.getSize().getId());
         if (existItem == null) {
             CartItemDao.add(item);
             return 0;
@@ -36,11 +34,23 @@ public class CartService {
         return CartItemDao.delete(item);
     }
 
-    public static  boolean updateItem(CartItem item) {
+    public static boolean clear(Cart cart) {
+        return CartItemDao.delete(cart.getId());
+    }
+
+    public static double totalCart(Cart cart) {
+        double total = 0;
+        for (CartItem cartItem : cart.getCartItems()) {
+            total += cartItem.getAmount() * cartItem.getProduct().getPrice();
+        }
+        return total;
+    }
+
+    public static boolean updateItem(CartItem item) {
         // check sp trong kho k du thi k update
-        CartItem existItem = CartItemDao.findByProductIdAndColorIdAndSizeId(item.getProduct().getId(), item.getColor().getId(), item.getSize().getId());
+        CartItem existItem = CartItemDao.findByCartIdProductIdAndColorIdAndSizeId(item.getCartId(), item.getProduct().getId(), item.getColor().getId(), item.getSize().getId());
         existItem.setAmount(item.getAmount());
-        return  CartItemDao.update(existItem);
+        return CartItemDao.update(existItem);
     }
 
 }

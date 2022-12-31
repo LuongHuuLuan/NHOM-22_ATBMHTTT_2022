@@ -256,31 +256,6 @@ Validator({
     ],
 });
 Validator({
-    form: "#form-add-user",
-    errorSelector: ".form-error",
-    formGroupSelector: ".form-group",
-    rules: [
-        Validator.isRequire("#last_name", "Vui lòng nhập họ"),
-        Validator.isRequire("#first_name", "Vui lòng nhập tên"),
-        Validator.isRequire('#email', "Vui lòng nhập email"),
-        Validator.isRequire('#phone', "Vui lòng nhập số điện thoại"),
-        Validator.isRequire('#username', "Vui lòng nhập tên tài khoản"),
-        Validator.isRequire('#password', "Vui lòng nhập mật khẩu"),
-        Validator.isRequire('#repeat_password', "Vui lòng nhập lại mật khẩu"),
-        Validator.isEmail("#email", "Email không hợp lệ"),
-        Validator.isPhone("#phone", "Số điện thoại không hợp lệ"),
-        Validator.isUsername("#username", "Tài khoản phải từ 4-20 ký tự và không chứa ký tự đặc biệt"),
-        Validator.isPassword("#password", "Mật khẩu ít nhất là 4 ký tự và không chứa ký tự đặc biệt"),
-        Validator.isConfirmed(
-            "#repeat_password",
-            () => {
-                return document.querySelector("#form-add-user #password").value;
-            },
-            "Mật khẩu nhập lại không chính xác"
-        ),
-    ],
-});
-Validator({
     form: "#form-add-product",
     errorSelector: ".form-error",
     formGroupSelector: ".form-group",

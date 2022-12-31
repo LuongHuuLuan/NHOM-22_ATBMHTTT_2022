@@ -109,7 +109,7 @@
         </button>
 
         <div class="navbar-header pull-left">
-            <a href="admin-dash-board" class="navbar-brand">
+            <a href="dash-board" class="navbar-brand">
                 <small>
                     <i class="fa fa-leaf"></i>
                     Admin WBH
@@ -123,7 +123,7 @@
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                         <img class="nav-user-photo" src="<c:url value='/admin/avatars/user.jpg'/>" alt="Jason's Photo"/>
                         <span class="user-info" style="margin-top: 10px">
-                            ${sessionScope.account == null?"Tài Khoản":sessionScope.account.userName}
+                            ${sessionScope.account == null?"Tài Khoản":sessionScope.account.username}
                         </span>
 
                         <i class="ace-icon fa fa-caret-down"></i>
@@ -131,7 +131,7 @@
 
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li>
-                            <a href="home">
+                            <a href="/WebBanQuanAo/home">
                                 <i class="ace-icon fa fa-cog"></i>
                                 Home shop
                             </a>
@@ -147,7 +147,7 @@
                         <li class="divider"></li>
 
                         <li>
-                            <a href="logout">
+                            <a href="/WebBanQuanAo/logout">
                                 <i class="ace-icon fa fa-power-off"></i>
                                 Logout
                             </a>

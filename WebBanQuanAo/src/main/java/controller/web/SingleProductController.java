@@ -1,4 +1,4 @@
-package controller;
+package controller.web;
 
 import Services.*;
 import model.Color;

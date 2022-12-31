@@ -1,5 +1,6 @@
 package Services;
 
+import dao.CartDao;
 import model.Account;
 import dao.AccountDao;
 
@@ -8,9 +9,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class AccountServices {
-    private static List<Account> accounts = new ArrayList<Account>();
 
     // new
+    public static List<Account> getAll() {
+        return AccountDao.findAll();
+    }
+
+    public static Account getUser(long id) {
+        return AccountDao.findOneById(id);
+    }
+
     public static Account getAccount(String userName, String passWord, boolean isHash) {
         return AccountDao.findOneByUserNameAndPassword(userName, passWord, isHash);
     }
@@ -26,12 +34,15 @@ public class AccountServices {
         return account;
     }
 
-    public static boolean addNewAccount(Account account) {
-        return AccountDao.add(account) != -1;
+    public static long addNewAccount(Account account) {
+        return AccountDao.add(account);
     }
 
     public static boolean update(Account account, boolean isHash) {
         return AccountDao.update(account, isHash);
+    }
+    public static boolean deleteAccount(long id) {
+        return AccountDao.delete(id);
     }
 
 }

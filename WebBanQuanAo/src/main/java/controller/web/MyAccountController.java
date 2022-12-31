@@ -1,4 +1,4 @@
-package controller;
+package controller.web;
 
 import Services.AccountServices;
 import Services.LoginService;
@@ -17,6 +17,7 @@ import java.io.IOException;
 public class MyAccountController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LoginService.login(request, response);
         request.setAttribute("pageName", "Tài khoản");
         RequestDispatcher rd = request.getRequestDispatcher("/views/web/myAccount.jsp");
         rd.forward(request, response);
@@ -25,7 +26,6 @@ public class MyAccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        LoginService.login(request, response);
         Account account = (Account) session.getAttribute("account");
         if (account != null) {
             String type = request.getParameter("type");
@@ -41,18 +41,29 @@ public class MyAccountController extends HttpServlet {
                 account.setEmail(email);
                 account.setPhone(sdt);
                 account.setAddress(address);
-                AccountServices.update(account, false);
+                if (AccountServices.update(account, false)) {
+                    request.setAttribute("message", "Cập nhật thành công");
+                }
             } else if (type.equals("changePass")) {
                 String password = request.getParameter("password");
                 String newPass = request.getParameter("newpass");
 
                 Account accountWithNewPass = AccountServices.getAccount(account.getUsername(), password, true);
                 if (account != null) {
-                    accountWithNewPass.setPassword(newPass);
-                    AccountServices.update(accountWithNewPass, true);
+                    if (accountWithNewPass == null) {
+                        request.setAttribute("message", "Sai mật khẩu");
+                    } else {
+                        accountWithNewPass.setPassword(newPass);
+                        if (AccountServices.update(accountWithNewPass, true)) {
+                            request.setAttribute("message", "Cập nhật thành công");
+                        }
+                    }
                 }
             }
+        } else {
+            request.setAttribute("message", "Vui lòng đăng nhập");
         }
-        response.sendRedirect("my-account");
+        session.setAttribute("account", account);
+        doGet(request, response);
     }
 }

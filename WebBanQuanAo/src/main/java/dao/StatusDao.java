@@ -32,6 +32,26 @@ public class StatusDao {
         return statuses;
     }
 
+    public static List<Status> findByStatusGroup(String statusGroup) {
+        List<Status> statuses = new ArrayList<>();
+        Connection connection = Connect.getInstance().getConnection();
+        try {
+            String query = "SELECT * FROM status WHERE STATUS_GROUP = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, statusGroup);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Status status = StatusMapper.mapRow(resultSet);
+                statuses.add(status);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return statuses;
+    }
+
     public static Status findOneById(long id) {
         Connection connection = Connect.getInstance().getConnection();
         Status status = null;
@@ -39,6 +59,26 @@ public class StatusDao {
             String query = "SELECT * FROM status WHERE ID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                status = StatusMapper.mapRow(resultSet);
+                break;
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public static Status findOneByName(String name) {
+        Connection connection = Connect.getInstance().getConnection();
+        Status status = null;
+        try {
+            String query = "SELECT * FROM status WHERE NAME = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 status = StatusMapper.mapRow(resultSet);

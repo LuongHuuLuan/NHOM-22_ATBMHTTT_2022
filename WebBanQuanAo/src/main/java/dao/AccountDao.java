@@ -215,7 +215,7 @@ public class AccountDao {
             Cart cart = CartDao.findOneByAccount(account);
             Order order = OrderDao.findOneByAccount(account);
             if (cart != null) {
-                CartDao.delete(cart);
+                CartDao.delete(cart.getId());
             }
             if (order != null) {
                 OrderDao.delete(order.getId());

@@ -79,7 +79,23 @@ public class CartDao {
         }
     }
 
-    public static void delete(Cart cart) {
+    public static void empty(Cart cart) {
         CartItemDao.delete(cart.getId());
+    }
+
+    public static boolean delete(long id) {
+        CartItemDao.delete(id);
+        String sql = "DELETE FROM cart WHERE ID = ?";
+        Connection connection = Connect.getInstance().getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            int resultSet = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return resultSet != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -13,6 +13,9 @@ public class OrderMapper {
         Order order = new Order();
         order.setId(rs.getLong("ID"));
         order.setAccount(AccountDao.findOneById(rs.getLong("ACCOUNT_ID")));
+        order.setRecipient(rs.getString("RECIPIENT"));
+        order.setOrderPhone(rs.getString("ORDERS_PHONE"));
+        order.setOrderAddress(rs.getString("ORDERS_ADDRESS"));
         order.setStatus(StatusDao.findOneById(rs.getLong("STATUS_ID")));
         order.setCreatedDate(rs.getTimestamp("CREATED_DATE"));
         order.setCreatedBy(rs.getString("CREATED_BY"));

@@ -31,7 +31,7 @@
                             <c:forEach var="cartItem" items="${cart.cartItems}">
                                 <tr class="my-cart-item">
                                     <td class="sop-cart">
-                                        <a href='<c:url value="/single-product?productId=${cartItem.product.code}"/>'>
+                                        <a href='<c:url value="single-product?productId=${cartItem.product.code}"/>'>
                                             <img
                                                     class="primary-image"
                                                     alt=""
@@ -56,7 +56,7 @@
                                     </td>
                                     <td class="sop-cart">
                                         <div class="tb-beg">
-                                            <a href="/single-product?productId=${cartItem.product.code}"><c:out
+                                            <a href="single-product?productId=${cartItem.product.code}"><c:out
                                                     value="${cartItem.product.name}"/></a>
                                         </div>
                                     </td>

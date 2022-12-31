@@ -1,5 +1,6 @@
 package controller.admin;
 
+import Services.LoginService;
 import model.Account;
 
 import javax.servlet.RequestDispatcher;
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class dashBoardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LoginService.login(request, response);
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         if (account == null || !(account.getRole().getName().equals("ADMIN"))) {

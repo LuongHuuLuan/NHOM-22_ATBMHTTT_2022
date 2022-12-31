@@ -6,6 +6,7 @@ public class Status extends ModelParent implements Serializable {
     private String code;
     private String name;
     private String description;
+    private String statusGroup;
 
     public String getCode() {
         return code;
@@ -29,5 +30,13 @@ public class Status extends ModelParent implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStatusGroup() {
+        return statusGroup;
+    }
+
+    public void setStatusGroup(String statusGroup) {
+        this.statusGroup = statusGroup;
     }
 }

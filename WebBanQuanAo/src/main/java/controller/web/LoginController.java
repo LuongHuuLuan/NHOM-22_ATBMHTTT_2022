@@ -1,4 +1,4 @@
-package controller;
+package controller.web;
 
 import Services.CartService;
 import Services.LoginService;
@@ -46,7 +46,7 @@ public class LoginController extends HttpServlet {
             Cart cart = CartService.getCart(account);
             session.setAttribute("account", account);
             session.setAttribute("cart", cart);
-            if (account.getRole().getCode().equalsIgnoreCase("admin")) {
+            if (account.getRole().getName().equalsIgnoreCase("ADMIN")) {
                 response.sendRedirect("admin-dash-board");
             } else {
                 response.sendRedirect("home");
@@ -79,7 +79,7 @@ public class LoginController extends HttpServlet {
                 reLoginToken.setMaxAge(60 * 60 * 24);
                 response.addCookie(reLoginToken);
             }
-            if (account.getRole().equals("ADMIN")) {
+            if (account.getRole().getName().equalsIgnoreCase("ADMIN")) {
                 response.sendRedirect("admin-dash-board");
             } else {
                 response.sendRedirect("home");
