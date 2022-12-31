@@ -1,15 +1,15 @@
 package Services;
 
+import model.Account;
 import dao.AccountDao;
 
 import java.util.Random;
 
 public class ForgotPasswordService {
     public static boolean verifyForgotPassword(String email) {
-        String findEmail = AccountDao.getEmailFromTaiKhoanTable(email);
-
-        if (!findEmail.equals("")) {
-            SendMailService.sendMail(findEmail, "Mat khau moi cua ban", "Mat khau moi cua ban la: \r\n"+getNewPassword());
+        Account account = AccountDao.findOneByEmail(email);
+        if (account != null) {
+            SendMailService.sendMail(account.getEmail(), "Mat khau moi cua ban", "Mat khau moi cua ban la: \r\n" + getNewPassword());
         } else {
             return false;
         }

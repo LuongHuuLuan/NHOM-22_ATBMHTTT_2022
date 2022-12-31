@@ -7,10 +7,23 @@
 <body>
 <!-- pages-title-start -->
 <%@include file="/components/location.jsp" %>
+<c:if var="accountIsExist" test="${sessionScope.account !=null}">
+    <jsp:useBean id="account" scope="session"
+                 type="model.Account"/>
+</c:if>
 <!-- pages-title-end -->
 <!-- my account content section start -->
 <section class="collapse_area coll2">
     <div class="container">
+
+        <div style="height: 0px; display: flex; justify-content: flex-end;">
+            <div class="message_box" style="position: fixed; z-index: 9999; padding: 20px;">
+                <div class="alert alert-success" id="message_box" style="width: 25vw;">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong id="msg_box">${requestScope.message}</strong>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="modal-update-account" tabindex="-1" role="dialog"
              aria-labelledby="modal-update-account"
@@ -77,7 +90,6 @@
                                  aria-labelledby="headingOne" aria-expanded="false">
                                 <div class="row">
                                     <%--start account information--%>
-                                    <c:if var="MTAccount" test="${sessionScope.account != null}"/>
                                     <div class="easy2">
                                         <h2>Thông tin tài khoản</h2>
                                         <form id="update-account-form" class="form-horizontal" method="post"
@@ -90,7 +102,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="text" placeholder="Họ"
                                                                name="lastname"
-                                                               value="${MTAccount?account.getFirstName():""}">
+                                                               value="${accountIsExist?account.lastName:""}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group required">
@@ -98,7 +110,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="text" placeholder="Tên"
                                                                name="firstname"
-                                                               value="${MTAccount?account.getLastName():""}">
+                                                               value="${accountIsExist?account.firstName:""}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group required">
@@ -106,7 +118,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="email" placeholder="E-Mail"
                                                                name="email"
-                                                               value="${MTAccount?account.getEmail():""}">
+                                                               value="${accountIsExist?account.email:""}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group required">
@@ -114,7 +126,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="tel" placeholder="SĐT"
                                                                name="sdt"
-                                                               value="${MTAccount?account.getPhoneNumber():""}">
+                                                               value="${accountIsExist?account.phone:""}">
                                                     </div>
                                                 </div>
 
@@ -123,7 +135,7 @@
                                                     <div class="col-sm-10">
                                                         <input class="form-control" type="tel" placeholder="Địa chỉ"
                                                                name="address"
-                                                               value="${MTAccount?account.getAddress():""}">
+                                                               value="${accountIsExist?account.address:""}">
                                                     </div>
                                                 </div>
 
@@ -252,6 +264,17 @@
 <!-- my account content section end -->
 <script src='<c:url value="/assets/js/validation.js"/>'></script>
 <script>
+    $(document).ready(function () {
+        let message = "${requestScope.message}";
+        if (message === "") {
+            $("#message_box").hide();
+        } else {
+            $("#message_box").fadeTo(2000, 500).slideUp(500, function () {
+                $("#message_box").slideUp(500);
+            });
+        }
+    })
+
     function update(e) {
         e.preventDefault();
         $("#modal-update-account").modal("show");

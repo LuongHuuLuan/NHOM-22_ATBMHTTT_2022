@@ -1,41 +1,93 @@
 package Services;
 
 import dao.AccountDao;
-import dao.RegisterDao;
+import dao.RoleDao;
+import dao.StatusDao;
+import model.Account;
+import model.Role;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public class RegisterService {
-    public static int addRegister(String lastName, String firstName, String phoneNumber, String email, String
-            userName, String password) {
-        String token = "";
-        boolean emailIsExist = email.equals(AccountDao.getEmail(email));
-        boolean userNameIsExist = userName.equals(AccountDao.getUserName(userName));
-        int result = 0;
-        // neu email va username chua duoc dang ky thi se cho dang ky
-        if (!emailIsExist && !userNameIsExist) {
-            token = String.valueOf(UUID.randomUUID());
-            password = HashService.getHash(password);
-            boolean checkAddRegister = RegisterDao.addRegister(lastName, firstName, phoneNumber, email, userName, password, token);
-            if (!checkAddRegister) {
-                result = 1;
-                // Da xay ra loi trong qua trinh dang ky vui long thu lai sau
-                return result;
-            }
-            int registerID = RegisterDao.getRegisterID(userName, token);
-            String link = "http://localhost:8080/WebBanQuanAo/confirm?id=" + registerID + "&token=" + token;
-            SendMailService.sendMail(email, "Xac thuc dang ky", link);
-        } else {
-            if (emailIsExist) {
-//                message = "Email da duoc dang ky vui long nhap email khac";
-                result = 2;
-                return result;
+    public static int checkRegister(Account newAccount) {
+        try {
+            if (!checkEmailExist(newAccount.getEmail())) {
+                if (!checkUserNameExist(newAccount.getUsername())) {
+                    String validateToken = UUID.randomUUID().toString();
+                    newAccount.setValidateToken(validateToken);
+                    newAccount.setRole(RoleDao.findOneByName("USER"));
+                    newAccount.setStatus(StatusDao.findOneByCode("UNVALIDATE"));
+                    long id = AccountDao.add(newAccount);
+                    String link = "http://localhost:8080/WebBanQuanAo/confirm?id=" + id + "&token=" + validateToken;
+                    SendMailService.sendMail(newAccount.getEmail(), "Xac thuc dang ky", link);
+                    return 0;
+                } else {
+                    return 3;
+                }
             } else {
-//                message = "Ten tai khoan da ton tai nhap ten khac";
-                result = 3;
-                return result;
+                return 2;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    public static boolean checkUserNameExist(String userName) {
+        Account account = AccountDao.findOneByUserName(userName);
+        boolean result = true;
+        if (account == null) {
+            result = false;
+        } else {
+            if (account.getStatus().getCode().equalsIgnoreCase("UNVALIDATE")) {
+                Timestamp createDate = account.getCreatedDate();
+                //Kiểm tra thời gian đăng ký có quá thời gian hiện tại trừ đi 24 tiếng hay không nếu có là sai ngc lại là đúng
+                boolean checkExpires = createDate.after(Timestamp.valueOf(LocalDateTime.now().minus(1, ChronoUnit.DAYS)));
+                if (!checkExpires) {
+                    AccountDao.delete(account.getId());
+                    result = false;
+                }
             }
         }
         return result;
     }
+
+    public static boolean checkEmailExist(String email) {
+        Account account = AccountDao.findOneByEmail(email);
+        boolean result = true;
+        if (account == null) {
+            result = false;
+        } else {
+            if (account.getStatus().getCode().equalsIgnoreCase("UNVALIDATE")) {
+                Timestamp createDate = account.getCreatedDate();
+                //Kiểm tra thời gian đăng ký có quá thời gian hiện tại trừ đi 24 tiếng hay không
+                boolean checkExpires = createDate.after(Timestamp.valueOf(LocalDateTime.now().minus(1, ChronoUnit.DAYS)));
+                if (!checkExpires) {
+                    AccountDao.delete(account.getId());
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static boolean confirmRegister(long id, String token) {
+        Account account = AccountDao.findOneByIdAndValidateToken(id, token);
+        if (account == null) return false;
+        if (account.getStatus().getCode().equalsIgnoreCase("UNVALIDATE")) {
+            boolean checkExpires = account.getCreatedDate().after(Timestamp.valueOf(LocalDateTime.now().minus(1, ChronoUnit.DAYS)));
+            if (!checkExpires) {
+                return false;
+            } else {
+                account.setStatus(StatusDao.findOneByCode("ACTIVE"));
+                return AccountDao.update(account, false);
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

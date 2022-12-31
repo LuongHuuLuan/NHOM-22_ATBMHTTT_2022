@@ -7,19 +7,22 @@
 </head>
 <body>
 <%@include file="/components/location.jsp" %>
+<jsp:useBean id="cart" scope="session" type="model.Cart"/>
+<jsp:useBean id="account" scope="session" type="model.Account"/>
 <!-- pages-title-end -->
 <!-- checkout content section start -->
 <div class="checkout-area">
     <div class="container">
+
         <div style="height: 0px; display: flex; justify-content: flex-end;">
             <div class="message_box" style="position: fixed; z-index: 9999; padding: 20px;">
                 <div class="alert alert-success" id="message_box" style="width: 25vw;">
                     <button type="button" class="close" data-dismiss="alert">x</button>
                     <strong id="msg_box">${requestScope.message}</strong>
-
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-5 col-sm-12">
                 <div class="ro-checkout-summary">
@@ -27,27 +30,27 @@
                         <h3 class="checkbox9">Tổng thanh toán</h3>
                     </div>
                     <div class="ro-body">
-                        <c:forEach var="item" items="${requestScope.cartItems}">
+                        <c:forEach var="item" items="${cart.cartItems}">
                             <div class="ro-item">
                                 <div class="ro-image">
-                                    <a href='<c:url value="/single-product?productId=${item.idProduct}"/>'>
-                                        <img src='<c:url value="${item.thumbnail}"/>' alt="">
+                                    <a href='<c:url value="/single-product?productId=${item.product.code}"/>'>
+                                        <img src='<c:url value="${item.product.thumbnail}"/>' alt="">
                                     </a>
                                 </div>
                                 <div>
                                     <div class="tb-beg">
-                                        <a href='<c:url value="/single-product?productId=${item.idProduct}"/>'>${item.nameProduct}</a>
+                                        <a href='<c:url value="/single-product?productId=${item.product.code}"/>'>${item.product.name}</a>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="ro-price">
-                                        <span class="amount">${item.price} VNĐ</span>
+                                        <span class="amount">${item.product.price}</span>
                                     </div>
                                     <div class="ro-quantity">
-                                        <strong class="product-quantity">× ${item.quantity}</strong>
+                                        <strong class="product-quantity">× ${item.amount}</strong>
                                     </div>
                                     <div class="product-total">
-                                        <span class="amount">Tổng: ${item.quantity * item.price} VNĐ</span>
+                                        Tổng: <span class="amount">${item.amount * item.product.price}</span>
                                     </div>
                                 </div>
                             </div>
@@ -79,9 +82,14 @@
                         <div>
                             <p>
                                 Tổng tiền sản phẩm
-                                <span>
-                                            <span class="amount">${requestScope.totalPrice} VNĐ</span>
-                                        </span>
+                                <span class="amount">${requestScope.totalCart}</span>
+                            </p>
+                            <div class="ro-divide"></div>
+                        </div>
+                        <div>
+                            <p>
+                                Tổng tiền giảm
+                                <span class="amount">0</span>
                             </p>
                             <div class="ro-divide"></div>
                         </div>
@@ -100,7 +108,7 @@
                                 Tổng
                                 <span>
                                     <strong>
-                                        <span class="amount">${requestScope.totalPrice} VNĐ</span>
+                                        <span class="amount">${requestScope.totalCart}</span>
                                     </strong>
                                 </span>
                             </p>
@@ -108,11 +116,9 @@
                         <div>
                             <p>
                                 Tổng giá trị thanh toán
-                                <span>
-                                            <strong>
-                                                <span class="amount">${requestScope.totalPrice} VNĐ</span>
-                                            </strong>
-                                        </span>
+                                <strong>
+                                    <span class="amount">${requestScope.totalCart}</span>
+                                </strong>
                             </p>
                         </div>
                     </div>
@@ -121,13 +127,11 @@
             <div class="col-md-7 col-sm-12">
                 <div class="text">
                     <div class="row">
-                        <c:if var="accountIsExist" test="${sessionScope.account != null}"/>
                         <form id="form-checkout" action="/WebBanQuanAo/checkout" method="post">
                             <div class="checkbox-form">
                                 <div class="col-md-12">
                                     <h3 class="checkbox9">Thông tin hóa đơn</h3>
                                 </div>
-                                <input hidden id="idCart" value="${idCart}" name="idCart">
                                 <div class="col-md-12 form-group">
                                     <div class="di-na bs">
                                         <label class="l-contact">
@@ -135,7 +139,7 @@
                                             <em>*</em>
                                         </label>
                                         <input class="form-control" id="fullname" type="text" name="fullname"
-                                               value="${accountIsExist? requestScope.fullName:""}"
+                                               value="${account.lastName} ${account.firstName}"
                                         >
                                         <p class="form-error" style="color: red"></p>
                                     </div>
@@ -148,7 +152,7 @@
                                         </label>
                                         <input class="form-control" id="phone-number" type="tel" required="" name="sdt"
                                                placeholder="Nhập số điện thoại nhận hàng"
-                                               value="${accountIsExist? sessionScope.account.phoneNumber:""}">
+                                               value="${account.phone}">
                                         <p class="form-error" style="color: red"></p>
                                     </div>
                                 </div>
@@ -162,7 +166,7 @@
                                             <input class="form-control" id="address-customer" type="text" required=""
                                                    name="address"
                                                    placeholder="Nhập địa chỉ nhận hàng"
-                                                   value="${accountIsExist? sessionScope.account.address:""}"
+                                                   value="${account.address}"
                                             >
                                         </div>
                                         <p class="form-error" style="color: red"></p>
@@ -184,7 +188,6 @@
     </div>
 </div>
 <!-- checkout content section end -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src='<c:url value="/assets/js/validation.js"/>'></script>
 <script>
     $(document).ready(function () {
@@ -196,6 +199,11 @@
                 $("#message_box").slideUp(500);
             });
         }
+
+        const amountElements = Array.from($('.amount'));
+        amountElements.forEach((amount) => {
+            $(amount).text(parseInt($(amount).text()).toLocaleString('it-IT', {style: 'currency', currency: 'VND'}));
+        })
     })
     Validator({
         form: "#form-checkout",

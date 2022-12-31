@@ -16,7 +16,7 @@ public class DeleteAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idAccount = request.getParameter("id_account");
-        boolean delete = AccountDao.deleteAccount(idAccount);
+        boolean delete = AccountDao.delete(Integer.parseInt(idAccount));
         String msg = delete ? "Xóa tài khoản thành công!" : "Xóa tài khoản thất bại!";
         response.setContentType("application/text");
         Gson gson = new Gson();

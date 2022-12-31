@@ -1,10 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.time.DayOfWeek" %>
-<%@ page import="beans.Account" %>
 <!-- header section start -->
 <%@page pageEncoding="UTF-8" %>
+<c:if var="accountIsExist" test="${sessionScope.account !=null}">
+    <jsp:useBean id="account" scope="session" type="model.Account"/>
+    <jsp:useBean id="cart" scope="session"
+                 type="model.Cart"/>
+</c:if>
 <header>
     <div class="header-top">
         <div class="container">
@@ -12,7 +13,8 @@
                 <div class="col-md-3 col-sm-4">
                     <div class="left-header clearfix">
                         <ul>
-                            <li class="hd-none"><p><i class="fa fa-clock-o" aria-hidden="true"></i>${sessionScope.day}
+                            <li class="hd-none"><p><i class="fa fa-clock-o" aria-hidden="true"></i> <span
+                                    id="my-date"></span>
                             </p></li>
                         </ul>
                     </div>
@@ -20,17 +22,13 @@
                 <div class="col-md-9 col-sm-8">
                     <div class="right-header">
                         <ul>
-                            <c:if var="accountIsExist" test="${sessionScope.account != null}"/>
-                            <c:if test='${(accountIsExist && sessionScope.account.role.equals("ADMIN"))}'>
+                            <c:if test='${(accountIsExist && account.role.name.equals("ADMIN"))}'>
                                 <li><a href="admin-dash-board"><i
                                         class="fa fa-user"></i>Quản lý</a></li>
                             </c:if>
+                            <li><a href="my-account"><i
+                                    class="fa fa-user"></i>${accountIsExist?account.username:"Tài Khoản"}</a></li>
                             <c:if test="${accountIsExist}">
-                                <li><a href="my-account"><i
-                                        class="fa fa-user"></i>${account.getUserName()}</a>
-                                </li>
-                            </c:if>
-                            <c:if test="${sessionScope.account != null}">
                                 <li><a href="shopping-cart"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                             </c:if>
                             <c:if test="${accountIsExist}">
@@ -184,7 +182,7 @@
                                 <c:if test="${sessionScope.account != null}">
                                     <li><a href="shopping-cart"><i class="fa fa-shopping-cart"></i><span
                                             id="all-card-item"
-                                            class="color1"></span></a>
+                                            class="color1">${accountIsExist?cart.cartItems.size():null}</span></a>
                                             <%--                                    <ul class="drop-cart">--%>
                                             <%--                                        <li>--%>
                                             <%--                                            <a href="shopping-cart"><img src='<c:url value="/assets/imgs/cart/1.png"/>'--%>
@@ -236,4 +234,24 @@
         </div>
     </div>
 </header>
+<script>
+    const now = new Date();
+    const days = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+    let day = days[now.getDay()];
+    const formatDate = day + ", " + now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
+    const myDateElement = document.getElementById("my-date");
+    myDateElement.innerText = formatDate;
+    const cartIcon = $("#all-card-item");
+    function increaseItem() {
+        let numItem = parseInt(cartIcon.text());
+        numItem++;
+        cartIcon.text(numItem);
+    }
+
+    function decreaseItem() {
+        let numItem = parseInt(cartIcon.text());
+        numItem--;
+        cartIcon.text(numItem);
+    }
+</script>
 <!-- header section end -->

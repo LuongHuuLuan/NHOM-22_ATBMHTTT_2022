@@ -1,6 +1,6 @@
 package api;
 
-import beans.Account;
+import model.Account;
 import dao.AccountDao;
 import com.google.gson.Gson;
 
@@ -18,7 +18,7 @@ public class GetAllAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
-        List<Account> listAccount = AccountDao.getListUser();
+        List<Account> listAccount = AccountDao.findAll();
         response.setContentType("application/json");
         Gson gson = new Gson();
         String list = gson.toJson(listAccount);
