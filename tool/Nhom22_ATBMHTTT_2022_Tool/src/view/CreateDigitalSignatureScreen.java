@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.NoSuchProviderException;
 import java.util.Base64;
 
 import javax.swing.DefaultComboBoxModel;
@@ -31,7 +32,7 @@ import heppers.Constants;
 
 public class CreateDigitalSignatureScreen extends JPanel {
 	private Key key = new Key();
-	private RSA rsa = new RSA();
+	private RSA rsa;
 	private Hash hash = new Hash("SHA-256");
 	private JTextArea textAreaKhoaCongKhai;
 	private JTextArea textAreaKhoaBiMat;
@@ -60,11 +61,13 @@ public class CreateDigitalSignatureScreen extends JPanel {
 
 	/**
 	 * Create the frame.
+	 * @throws NoSuchProviderException 
 	 */
-	public CreateDigitalSignatureScreen() {
+	public CreateDigitalSignatureScreen() throws NoSuchProviderException {
 //		setTitle("Tạo chữ kí điện tử");
 //		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setBounds(100, 100, 978, 599);
+		rsa =  new RSA();
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
 		setBounds(100, 100, 978, 599);

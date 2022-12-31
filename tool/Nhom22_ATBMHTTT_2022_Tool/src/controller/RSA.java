@@ -6,9 +6,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -31,7 +33,7 @@ public class RSA {
 	// Long add more 1 line
 	private static RSA rsa = null;
 
-	public RSA() {
+	public RSA() throws NoSuchProviderException {
 		try {
 			this.cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
@@ -40,7 +42,7 @@ public class RSA {
 	}
 
 	// Long add some line here :)))))
-	public static RSA getInstance() {
+	public static RSA getInstance() throws NoSuchProviderException {
 		if (rsa == null) {
 			rsa = new RSA();
 		}
@@ -73,7 +75,8 @@ public class RSA {
 			e.printStackTrace();
 		}
 //		return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes()));
-		return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+//		return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+		return new String(byteArrayOutputStream.toByteArray());
 	}
 
 	public String decrypt(String text, String type, Object... objects)
@@ -96,7 +99,8 @@ public class RSA {
 			while (byteArrayInputStream.read(buffered) != -1) {
 				byteArrayOutputStream.write(cipher.doFinal(buffered));
 			}
-			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
+//			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
+			return new String(byteArrayOutputStream.toByteArray());
 		} catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
 			e.printStackTrace();
 			return "Error";
@@ -155,7 +159,8 @@ public class RSA {
 	}
 
 	// done
-	public static void main(String[] args) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+	public static void main(String[] args) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException,
+			InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
 		String s = "GSR+4XmQ49182NF1t5Eo1XRjgU3m6WYGZp8tVkAVTAzyUPbz4LSzb+2lGiu6MwwkggW9hPh03+YUfBFdKZgauYsk78Iq/yridI7Z9tX47AA+rlnXjQgQm2+eQDy9e/PB15vxZ5Q04VZ/XXT0ohSdPehcAmW3R1HMVDKzuoL4K/Q=";
 		BufferedReader bufferedReader = new BufferedReader(
 				new FileReader("D:\\test\\PublicKeyAndDigitalSignature.json"));
@@ -176,9 +181,14 @@ public class RSA {
 		PublicKey publicKey = KeyFactory.getInstance(Constants.RSA).generatePublic(keySpec);
 		String s1 = Hash.getIntance(Constants.SHA_256).hashFile("D:\\test\\1.pdf");
 		String s2 = RSA.getInstance().decrypt(s, Constants.PUBLIC_KEY, publicKey, 512);
-		s1= Base64.getEncoder().encodeToString(s1.getBytes());
+//		s1= Base64.getEncoder().encodeToString(s1.getBytes(StandardCharsets.UTF_8));
 		System.out.println(s1);
 		System.out.println(s2);
-		System.out.println(s1.equals(s2));
+		boolean sArray  = s1.startsWith(s1);//solve to check compare hashing after decrypt
+		boolean sArray2 = s1.endsWith(s1);
+//		for (String string : sArray) {
+//			System.out.println(string);
+//		}
+		System.out.println(sArray);
 	}
 }
