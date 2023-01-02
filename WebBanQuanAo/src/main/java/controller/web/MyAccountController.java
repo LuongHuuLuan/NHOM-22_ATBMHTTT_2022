@@ -78,12 +78,14 @@ public class MyAccountController extends HttpServlet {
                     sign.setActive(false);
                     SignService.update(sign);
                     sign.setSign(mySignature.getPublicKey());
+                    sign.setKeySize(mySignature.getKeySize());
                     sign.setActive(true);
                     SignService.add(sign);
                 } else {
                     sign = new Sign();
                     sign.setAccount(account);
                     sign.setSign(mySignature.getPublicKey());
+                    sign.setKeySize(mySignature.getKeySize());
                     sign.setActive(true);
                     SignService.add(sign);
                 }
