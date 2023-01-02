@@ -1,5 +1,9 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,9 +21,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+
+import org.jpedal.examples.viewer.Commands;
+import org.jpedal.examples.viewer.Viewer;
 
 import services.SignFileService;
+import javax.swing.border.LineBorder;
 
 public class SignPDFScreen extends JPanel {
 	private JLabel lblNewLabel;
@@ -27,19 +36,25 @@ public class SignPDFScreen extends JPanel {
 	private final String LOAD_PDF = "LOAD_PDF";
 	private final String LOAD_SIGN = "LOAD_SIGN";
 	private final String SAVE_FILE_SIGN = "SAVE_FILE_SIGN";
-	private String pathPDF;
+	private String pathPDF = null;
 	private String pathSign;
+	private JButton btn_TabBrowser_1;
+	private JButton btn_TabBrowser;
 
 	/**
 	 * Create the panel.
 	 */
 	public SignPDFScreen() {
-		setBorder(new EmptyBorder(5, 5, 5, 5));
-		setLayout(null);
+		setBackground(SystemColor.window);
+		setBorder(null);
 		setBounds(100, 100, 978, 599);
+		setLayout(null);
 
 		JButton btnNewButton = new JButton("Trở về");
-		btnNewButton.setBounds(777, 511, 89, 23);
+		btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		btnNewButton.setForeground(SystemColor.text);
+		btnNewButton.setBackground(new Color(231, 76, 60));
+		btnNewButton.setBounds(743, 436, 107, 37);
 		add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 
@@ -54,15 +69,24 @@ public class SignPDFScreen extends JPanel {
 		});
 
 		JButton btnNewButton_1 = new JButton("Import file PDF");
-		btnNewButton_1.setBounds(67, 72, 180, 23);
+		btnNewButton_1.setFocusPainted(false);
+		btnNewButton_1.setBorder(null);
+		btnNewButton_1.setBackground(new Color(236, 240, 241));
+		btnNewButton_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnNewButton_1.setBounds(41, 39, 164, 26);
 		add(btnNewButton_1);
 
 		lblNewLabel = new JLabel("Chưa có file nào được chọn");
-		lblNewLabel.setBounds(381, 81, 373, 14);
+		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblNewLabel.setBounds(241, 39, 202, 26);
 		add(lblNewLabel);
 
 		JButton btnNewButton_1_1 = new JButton("Import khóa riêng tư");
-		btnNewButton_1_1.setBounds(67, 153, 180, 23);
+		btnNewButton_1_1.setFocusPainted(false);
+		btnNewButton_1_1.setBorder(null);
+		btnNewButton_1_1.setBackground(new Color(236, 240, 241));
+		btnNewButton_1_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnNewButton_1_1.setBounds(41, 130, 164, 26);
 		add(btnNewButton_1_1);
 		btnNewButton_1_1.addActionListener(new ActionListener() {
 
@@ -73,16 +97,56 @@ public class SignPDFScreen extends JPanel {
 		});
 
 		lblNewLabel_1 = new JLabel("Chưa có file nào được chọn");
-		lblNewLabel_1.setBounds(381, 157, 373, 14);
+		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblNewLabel_1.setBounds(239, 130, 231, 26);
 		add(lblNewLabel_1);
 
 		JButton btnNewButton_2 = new JButton("Ký lên văn bản");
-		btnNewButton_2.setBounds(355, 511, 164, 23);
+		btnNewButton_2.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnNewButton_2.setBounds(678, 310, 200, 26);
 		add(btnNewButton_2);
 
 		JButton btnNewButton_2_1 = new JButton("Lưu văn bản đã ký");
-		btnNewButton_2_1.setBounds(546, 511, 164, 23);
+		btnNewButton_2_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnNewButton_2_1.setBounds(678, 231, 200, 26);
 		add(btnNewButton_2_1);
+
+		JSeparator separator = new JSeparator();
+		separator.setBounds(234, 69, 209, 2);
+		add(separator);
+
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(229, 160, 214, 2);
+		add(separator_1);
+
+		btn_TabBrowser = new JButton("Preview Tab Browser");
+		btn_TabBrowser.setEnabled(false);
+		btn_TabBrowser.setFocusPainted(false);
+		btn_TabBrowser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Desktop desktop = Desktop.getDesktop();
+					desktop.open(new File(pathPDF));
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(getParent(), e1.getMessage());
+				}
+			}
+		});
+		btn_TabBrowser.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btn_TabBrowser.setBounds(733, 39, 200, 26);
+		add(btn_TabBrowser);
+
+		btn_TabBrowser_1 = new JButton("Preview PDF");
+		btn_TabBrowser_1.setEnabled(false);
+		btn_TabBrowser_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DemoPDFScreen demo = new DemoPDFScreen(pathPDF);
+			}
+		});
+		btn_TabBrowser_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btn_TabBrowser_1.setFocusPainted(false);
+		btn_TabBrowser_1.setBounds(509, 39, 200, 26);
+		add(btn_TabBrowser_1);
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 
 			@Override
@@ -148,6 +212,18 @@ public class SignPDFScreen extends JPanel {
 				lblNewLabel.setText(file.getName());
 				pathPDF = file.getAbsolutePath();
 				optionPane.showMessageDialog(this, "ĐÃ LOAD FILE");
+				btn_TabBrowser_1.setEnabled(true);
+				btn_TabBrowser.setEnabled(true);
+//				DemoPDFScreen demo = new DemoPDFScreen(pathPDF);
+//				demo.setPathPDF(pathPDF);
+//				System.setProperty("org.jpedal.userControlledLAF", "javax.swing.plaf.metal.MetalLookAndFeel");
+//				Viewer viewer = new Viewer(panel,null);
+//				viewer.setupViewer();
+//				viewer.executeCommand(Commands.OPENFILE, new Object[]{pathPDF});
+//				Desktop desktop = Desktop.getDesktop();
+//			    desktop.open(file);
+//				openpdf(pathPDF);
+
 			} else if (type.equals(LOAD_SIGN)) {
 				lblNewLabel_1.setText(file.getName());
 				pathSign = file.getAbsolutePath();
@@ -159,6 +235,21 @@ public class SignPDFScreen extends JPanel {
 			JOptionPane.showMessageDialog(getParent(), e.getMessage());
 		}
 	}
+
+//	void openpdf(String file) {
+//		try {
+//			SwingController control = new SwingController();
+//			SwingViewBuilder factry = new SwingViewBuilder(control);
+//			panel = factry.buildViewerPanel();
+//			ComponentKeyBinding.install(control, panel);
+//			control.getDocumentViewController().setAnnotationCallback(
+//					new org.icepdf.ri.common.MyAnnotationCallback(control.getDocumentViewController()));
+//			control.openDocument(file);
+//			scrollPane.add(panel);
+//		} catch (Exception ex) {
+//			JOptionPane.showMessageDialog(this, "Cannot Load Pdf");
+//		}
+//	}
 
 	// save file after signed
 	void saveFile() throws IOException {
