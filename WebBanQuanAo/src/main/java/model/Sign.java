@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Sign extends ModelParent implements Serializable {
     private Account account;
     private String sign;
+    private int keySize;
     private boolean isActive;
 
     public Account getAccount() {
@@ -29,5 +30,13 @@ public class Sign extends ModelParent implements Serializable {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public int getKeySize() {
+        return keySize;
+    }
+
+    public void setKeySize(int keySize) {
+        this.keySize = keySize;
     }
 }

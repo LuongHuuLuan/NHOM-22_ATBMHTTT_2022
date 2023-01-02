@@ -1,5 +1,7 @@
 package util;
 
+import org.json.JSONObject;
+
 import java.io.*;
 
 public class MySignature {
@@ -12,7 +14,7 @@ public class MySignature {
 
     public MySignature(String url) {
         this.url = url;
-         this.read(url);
+        this.read(url);
     }
 
     private String readData(String url) {
@@ -35,26 +37,15 @@ public class MySignature {
 
     private void read(String url) {
         String data = readData(url).trim();
-        data = data.replace("{", "");
-        data = data.replace("}", "");
-        String[] keyValues = data.split(",");
-        for (int i = 0; i < keyValues.length; i++) {
-            if (i == 0) {
-                this.keySize = Integer.parseInt(keyValues[i].split(":")[1].trim());
-            } else if (i == 1) {
-                this.phone = keyValues[i].split(":")[1].replace("\"", "").trim();
-            } else if (i == 2) {
-                this.publicKey = keyValues[i].split(":")[1].replace("\"", "").trim();
-            } else if (i == 3) {
-                this.userName = keyValues[i].split(":")[1].replace("\"", "").trim();
-            } else {
-                this.email = keyValues[i].split(":")[1].replace("\"", "").trim();
-            }
-        }
+        JSONObject jsonObject = new JSONObject(data);
+        this.keySize = jsonObject.getInt("keySize");
+        this.phone = jsonObject.getString("phone");
+        this.publicKey = jsonObject.getString("publicKey");
+        this.userName = jsonObject.getString("userName");
+        this.email = jsonObject.getString("email");
     }
 
     public void delete() {
-        System.out.println(url);
         File f = new File(url);
         if (f.exists()) {
             f.delete();

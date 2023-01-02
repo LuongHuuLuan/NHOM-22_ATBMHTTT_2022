@@ -12,6 +12,7 @@ public class SignMapper {
         sign.setId(rs.getLong("ID"));
         sign.setAccount(AccountDao.findOneById(rs.getLong("ACCOUNT_ID")));
         sign.setSign(rs.getString("SIGN"));
+        sign.setKeySize(rs.getInt("KEY_SIZE"));
         sign.setActive(rs.getBoolean("IS_ACTIVE"));
         sign.setCreatedDate(rs.getTimestamp("CREATED_DATE"));
         sign.setCreatedBy(rs.getString("CREATED_BY"));
