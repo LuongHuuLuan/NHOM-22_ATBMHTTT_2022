@@ -2,10 +2,9 @@ package controller.web;
 
 import Services.LoginService;
 import Services.OrderServices;
-import model.Account;
-import model.Cart;
+import model.*;
 import Services.CartService;
-import model.Order;
+import util.CreatePDFOrder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,20 +35,18 @@ public class CheckoutController extends HttpServlet {
         String recipient = request.getParameter("fullname");
         String phone = request.getParameter("sdt");
         String address = request.getParameter("address");
+        String base = request.getServletContext().getContextPath();
 
         Cart cart = CartService.getCart(account);
         if (cart.getCartItems().isEmpty()) {
             request.setAttribute("message", "Giỏ hàng rỗng");
         } else {
-            Order order = new Order();
-            order.setAccount(account);
-            order.setRecipient(recipient);
-            order.setOrderPhone(phone);
-            order.setOrderAddress(address);
-            OrderServices.add(order);
-            CartService.clear(cart);
-            request.setAttribute("message", "Thành công");
+            long orderId = OrderServices.add(account, cart, recipient, phone, address);
+            Order order = OrderServices.getOrder(orderId);
+            CreatePDFOrder createPDFOrder = new CreatePDFOrder("order-" + orderId, order);
+            createPDFOrder.setRootFolder(request.getServletContext().getRealPath(base));
+            createPDFOrder.createPdf();
+            response.sendRedirect("sign?id=" + orderId);
         }
-        doGet(request, response);
     }
 }
