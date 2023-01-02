@@ -2,18 +2,22 @@ package controller.web;
 
 import Services.AccountServices;
 import Services.LoginService;
+import Services.SignService;
 import model.Account;
+import model.Sign;
+import util.MySignature;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
+import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet(name = "myAccountController", value = "/my-account")
+@MultipartConfig()
 public class MyAccountController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,6 +63,32 @@ public class MyAccountController extends HttpServlet {
                         }
                     }
                 }
+            } else if (type.equals("updateSign")) {
+                Part part = request.getPart("sign");
+                String readPath = request.getServletContext().getRealPath("/orders/upload");
+                String fileName = UUID.randomUUID().toString() + ".json";
+                File folder = new File(readPath);
+                if (!folder.exists()) {
+                    folder.mkdir();
+                }
+                part.write(readPath + "/" + fileName);
+                MySignature mySignature = new MySignature(readPath + "/" + fileName);
+                Sign sign = SignService.getSignWithAccountAndIsActive(account, true);
+                if (sign != null) {
+                    sign.setActive(false);
+                    SignService.update(sign);
+                    sign.setSign(mySignature.getPublicKey());
+                    sign.setActive(true);
+                    SignService.add(sign);
+                } else {
+                    sign = new Sign();
+                    sign.setAccount(account);
+                    sign.setSign(mySignature.getPublicKey());
+                    sign.setActive(true);
+                    SignService.add(sign);
+                }
+                mySignature.delete();
+                request.setAttribute("message", "Đã cập nhật chữ ký");
             }
         } else {
             request.setAttribute("message", "Vui lòng đăng nhập");

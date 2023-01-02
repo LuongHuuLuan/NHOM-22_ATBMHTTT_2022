@@ -70,6 +70,14 @@
             <artifactId>sitemesh</artifactId>
             <version>2.4.2</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.12</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

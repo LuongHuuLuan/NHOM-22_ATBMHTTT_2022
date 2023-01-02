@@ -10,7 +10,7 @@ import sort.SortProduct;
 
 public class ProductServices {
 
-    public List<Product> getProducts() {
+    public static List<Product> getProducts() {
         return ProductDao.findAll();
     }
 
@@ -39,6 +39,9 @@ public class ProductServices {
     public static Product getProduct(String productCode) {
         return ProductDao.findOneByCode(productCode);
     }
+    public static Product getProduct(long id) {
+        return ProductDao.findOneById(id);
+    }
 
     public static List<Image> getImageForProduct(Product product) {
 //        return ImageDao.findByProduct(product);
@@ -61,5 +64,8 @@ public class ProductServices {
         pageable.setSortProduct(sort);
         int items = ProductDao.count(pageable);
         return items % numOfProducts == 0 ? items / numOfProducts : (items / numOfProducts) + 1;
+    }
+    public static int count() {
+        return ProductDao.count();
     }
 }
