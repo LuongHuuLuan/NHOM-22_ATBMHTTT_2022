@@ -40,8 +40,11 @@ public class SignController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        LoginService.login(request, response);
         Account account = (Account) session.getAttribute("account");
+        Cart cart = (Cart) session.getAttribute("cart");
         Sign sign = SignService.getSignWithAccountAndIsActive(account, true);
+
         long orderId = Long.parseLong(request.getParameter("orderId"));
         Part orderPdf = request.getPart("order-pdf");
         String readPath = request.getServletContext().getRealPath("/orders/upload");
@@ -56,8 +59,6 @@ public class SignController extends HttpServlet {
             if (!folder.exists()) {
                 folder.mkdir();
             }
-            orderPdf.write(readPath + "/" + fileName);
-            orderPdf.write("E:\\GocHocTap\\intellij\\Antoanbaomathttt\\WebBanQuanAo\\src\\main\\webapp\\orders\\" + fileName);
             String orderNoSignUrl = request.getServletContext().getRealPath("/orders/download/order-" + orderId + ".pdf");
             String orderSignUrl = readPath + "/" + fileName;
 
@@ -69,12 +70,15 @@ public class SignController extends HttpServlet {
                 verification.setSign(sign);
                 verification.setOK(true);
                 VerificationService.add(verification);
+                CartService.clear(cart);
                 message = "Thanh toán thành công";
             } else {
                 message = "Thanh toán thất bại chữ ký không đúng";
             }
         }
         request.setAttribute("message", message);
-        doGet(request, response);
+        request.setAttribute("pageName", "Thông báo");
+        RequestDispatcher rd = request.getRequestDispatcher("/views/web/notification.jsp");
+        rd.forward(request, response);
     }
 }
