@@ -85,13 +85,12 @@ public class RSA {
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(temp);
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] buffered = generateByteBuffer(Constants.DECRYPT, keySize);
-		System.out.println(buffered.length);
 		try {
 			while (byteArrayInputStream.read(buffered) != -1) {
 				byteArrayOutputStream.write(cipher.doFinal(buffered));
 			}
-			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
-//			return new String(byteArrayOutputStream.toByteArray());
+//			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
+			return new String(byteArrayOutputStream.toByteArray());
 		} catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
 			e.printStackTrace();
 			return "Error";

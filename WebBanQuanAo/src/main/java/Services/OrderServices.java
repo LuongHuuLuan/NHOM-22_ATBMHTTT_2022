@@ -32,7 +32,6 @@ public class OrderServices {
             orderItem.setAmount(cartItem.getAmount());
             OrderItemDao.add(orderItem);
         }
-//        CartService.clear(cart);
         return orderId;
     }
 

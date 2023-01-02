@@ -8,8 +8,10 @@ import org.json.JSONObject;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchProviderException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 public class VerifySign {
     private String orderNoSignUrl;
@@ -66,7 +68,11 @@ public class VerifySign {
         String decryptHash = "";
         try {
             String sign = getSign();
-            decryptHash = RSA.getInstance().decrypt(sign, Constants.PUBLIC_KEY, this.sign.getKeySize());
+            byte[] keyBytes = Base64.getDecoder().decode(this.sign.getSign());
+            X509EncodedKeySpec ks = new X509EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            PublicKey pk = kf.generatePublic(ks);
+            decryptHash = RSA.getInstance().decrypt(sign, Constants.PUBLIC_KEY, pk, this.sign.getKeySize());
         } catch (IllegalBlockSizeException e) {
             throw new RuntimeException(e);
         } catch (BadPaddingException e) {
@@ -74,6 +80,10 @@ public class VerifySign {
         } catch (InvalidKeyException e) {
             throw new RuntimeException(e);
         } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
         return decryptHash;
