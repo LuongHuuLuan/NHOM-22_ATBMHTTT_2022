@@ -75,8 +75,8 @@ public class RSA {
 			e.printStackTrace();
 		}
 //		return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes()));
-//		return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
-		return new String(byteArrayOutputStream.toByteArray());
+		return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+//		return new String(byteArrayOutputStream.toByteArray());
 	}
 
 	public String decrypt(String text, String type, Object... objects)
@@ -99,8 +99,8 @@ public class RSA {
 			while (byteArrayInputStream.read(buffered) != -1) {
 				byteArrayOutputStream.write(cipher.doFinal(buffered));
 			}
-//			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
-			return new String(byteArrayOutputStream.toByteArray());
+			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
+//			return new String(byteArrayOutputStream.toByteArray());
 		} catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
 			e.printStackTrace();
 			return "Error";
