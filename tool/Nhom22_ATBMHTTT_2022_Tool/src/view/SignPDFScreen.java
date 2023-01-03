@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import services.SignFileService;
 
@@ -49,7 +50,7 @@ public class SignPDFScreen extends JPanel {
 		btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		btnNewButton.setForeground(SystemColor.text);
 		btnNewButton.setBackground(new Color(231, 76, 60));
-		btnNewButton.setBounds(743, 436, 107, 37);
+		btnNewButton.setBounds(757, 475, 107, 37);
 		add(btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 
@@ -68,12 +69,12 @@ public class SignPDFScreen extends JPanel {
 		btnNewButton_1.setBorder(null);
 		btnNewButton_1.setBackground(new Color(236, 240, 241));
 		btnNewButton_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btnNewButton_1.setBounds(41, 39, 164, 26);
+		btnNewButton_1.setBounds(41, 150, 164, 26);
 		add(btnNewButton_1);
 
 		lblNewLabel = new JLabel("Chưa có file nào được chọn");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblNewLabel.setBounds(241, 39, 202, 26);
+		lblNewLabel.setBounds(241, 150, 202, 26);
 		add(lblNewLabel);
 
 		JButton btnNewButton_1_1 = new JButton("Import khóa riêng tư");
@@ -81,7 +82,7 @@ public class SignPDFScreen extends JPanel {
 		btnNewButton_1_1.setBorder(null);
 		btnNewButton_1_1.setBackground(new Color(236, 240, 241));
 		btnNewButton_1_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btnNewButton_1_1.setBounds(41, 130, 164, 26);
+		btnNewButton_1_1.setBounds(41, 241, 164, 26);
 		add(btnNewButton_1_1);
 		btnNewButton_1_1.addActionListener(new ActionListener() {
 
@@ -93,25 +94,25 @@ public class SignPDFScreen extends JPanel {
 
 		lblNewLabel_1 = new JLabel("Chưa có file nào được chọn");
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(239, 130, 231, 26);
+		lblNewLabel_1.setBounds(239, 241, 231, 26);
 		add(lblNewLabel_1);
 
 		JButton btnNewButton_2 = new JButton("Ký lên văn bản");
 		btnNewButton_2.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btnNewButton_2.setBounds(678, 310, 200, 26);
+		btnNewButton_2.setBounds(223, 366, 200, 26);
 		add(btnNewButton_2);
 
 		JButton btnNewButton_2_1 = new JButton("Lưu văn bản đã ký");
 		btnNewButton_2_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btnNewButton_2_1.setBounds(678, 231, 200, 26);
+		btnNewButton_2_1.setBounds(552, 366, 200, 26);
 		add(btnNewButton_2_1);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(234, 69, 209, 2);
+		separator.setBounds(234, 180, 209, 2);
 		add(separator);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(229, 160, 214, 2);
+		separator_1.setBounds(229, 271, 214, 2);
 		add(separator_1);
 
 		btn_TabBrowser = new JButton("Preview Tab Browser");
@@ -128,7 +129,7 @@ public class SignPDFScreen extends JPanel {
 			}
 		});
 		btn_TabBrowser.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btn_TabBrowser.setBounds(733, 39, 200, 26);
+		btn_TabBrowser.setBounds(733, 150, 200, 26);
 		add(btn_TabBrowser);
 
 		btn_TabBrowser_1 = new JButton("Preview PDF");
@@ -140,8 +141,29 @@ public class SignPDFScreen extends JPanel {
 		});
 		btn_TabBrowser_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		btn_TabBrowser_1.setFocusPainted(false);
-		btn_TabBrowser_1.setBounds(509, 39, 200, 26);
+		btn_TabBrowser_1.setBounds(509, 150, 200, 26);
 		add(btn_TabBrowser_1);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBackground(new Color(174, 186, 198));
+		panel.setBounds(0, 0, 978, 75);
+		add(panel);
+		
+		JLabel lblNewLabel_2 = new JLabel("Logo School here");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_2.setBounds(32, 5, 61, 61);
+		panel.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Trường Đại học Nông Lâm Tp.HCM");
+		lblNewLabel_1_1.setFont(new Font("Segoe UI Light", Font.BOLD, 24));
+		lblNewLabel_1_1.setBounds(121, 5, 466, 36);
+		panel.add(lblNewLabel_1_1);
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("Khoa CNTT - An toàn và bảo mật hệ thống thông tin");
+		lblNewLabel_1_1_1.setFont(new Font("Segoe UI Light", Font.BOLD, 22));
+		lblNewLabel_1_1_1.setBounds(121, 37, 660, 30);
+		panel.add(lblNewLabel_1_1_1);
 		btnNewButton_2_1.addActionListener(new ActionListener() {
 
 			@Override
@@ -198,6 +220,21 @@ public class SignPDFScreen extends JPanel {
 	// input: type action file need load
 	void loadFile(String type) {
 		JFileChooser fileChooser = new JFileChooser();
+//		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//		fileChooser.setFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx"));
+//        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
+//        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+//        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx"));
+//        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter pdf = new FileNameExtensionFilter("PDF Documents", "pdf");
+		FileNameExtensionFilter ms = new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx");
+		FileNameExtensionFilter img = new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp");
+		fileChooser.addChoosableFileFilter(pdf);
+		fileChooser.addChoosableFileFilter(ms);
+		fileChooser.addChoosableFileFilter(img);
+//        fileChooser.setAcceptAllFileFilterUsed(true);
 		fileChooser.showOpenDialog(this);
 		try {
 			File file = fileChooser.getSelectedFile();
