@@ -18,7 +18,7 @@ public class ProductDao {
         List<Product> products = new ArrayList<>();
         Connection connection = Connect.getInstance().getConnection();
         try {
-            String query = "SELECT * FROM product";
+            String query = "SELECT * FROM product order by ID ASC";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {

@@ -2,10 +2,10 @@ package controller.web;
 
 import Services.LoginService;
 import Services.OrderServices;
-import model.Account;
-import model.Cart;
+import Services.StatusService;
+import model.*;
 import Services.CartService;
-import model.Order;
+import util.CreatePDFOrder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 @WebServlet(name = "checkoutController", value = "/checkout")
@@ -36,20 +37,28 @@ public class CheckoutController extends HttpServlet {
         String recipient = request.getParameter("fullname");
         String phone = request.getParameter("sdt");
         String address = request.getParameter("address");
+        String base = request.getServletContext().getContextPath();
 
         Cart cart = CartService.getCart(account);
+        File file = new File(request.getServletContext().getRealPath("orders/download"));
+        if (!file.exists()) {
+            file.mkdir();
+        }
         if (cart.getCartItems().isEmpty()) {
             request.setAttribute("message", "Giỏ hàng rỗng");
         } else {
-            Order order = new Order();
-            order.setAccount(account);
-            order.setRecipient(recipient);
-            order.setOrderPhone(phone);
-            order.setOrderAddress(address);
-            OrderServices.add(order);
-            CartService.clear(cart);
-            request.setAttribute("message", "Thành công");
+            Order order = OrderServices.getOrderByAccountAndStatus(account, StatusService.getStatusByName("WAIT"));
+            if (order != null) {
+                order.setStatus(StatusService.getStatusByName("CANCEL"));
+                OrderServices.updateStatus(order);
+                File oldOrder = new File(request.getServletContext().getRealPath("/orders/download/order-" + order.getId() + ".pdf"));
+                oldOrder.delete();
+            }
+            long orderId = OrderServices.add(account, cart, recipient, phone, address);
+            order = OrderServices.getOrder(orderId);
+            CreatePDFOrder createPDFOrder = new CreatePDFOrder(request.getServletContext().getRealPath("/"), request.getServletContext().getRealPath("/orders/download/order-" + order.getId() + ".pdf"), request.getServletContext().getRealPath("/assets/fonts/ARIALUNI.TTF"), order);
+            createPDFOrder.createPdf();
+            response.sendRedirect("sign?id=" + orderId);
         }
-        doGet(request, response);
     }
 }

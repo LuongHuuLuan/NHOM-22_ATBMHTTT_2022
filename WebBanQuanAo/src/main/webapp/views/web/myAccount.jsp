@@ -203,9 +203,6 @@
                                                 </div>
                                             </fieldset>
                                             <div class="buttons clearfix">
-                                                <%--                                                <div class="pull-left">--%>
-                                                <%--                                                    <a class="btn btn-default ce5" href="#">Trở lại</a>--%>
-                                                <%--                                                </div>--%>
                                                 <div class="pull-right">
                                                     <input class="btn btn-primary ce5" type="submit"
                                                            onclick="change(event)" value="Xác nhận">
@@ -217,44 +214,44 @@
                             </div>
                         </div>
 
-                        <%--                        <div class="panel panel-default">--%>
-                        <%--                            <div class="panel-heading" role="tab" id="headingThree">--%>
-                        <%--                                <h4 class="panel-title">--%>
-                        <%--                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"--%>
-                        <%--                                       href="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">Sửa đổi--%>
-                        <%--                                        danh sách địa chỉ <i class="fa fa-caret-down"></i></a>--%>
-                        <%--                                </h4>--%>
-                        <%--                            </div>--%>
-                        <%--                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"--%>
-                        <%--                                 aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">--%>
-                        <%--                                <div class="easy2">--%>
-                        <%--                                    <h2>Danh sách địa chỉ</h2>--%>
-                        <%--                                    <table class="table table-bordered table-hover">--%>
-                        <%--                                        <tr>--%>
-                        <%--                                            <td class="text-left">--%>
-                        <%--                                                Phường Linh Trung,--%>
-                        <%--                                                <br>--%>
-                        <%--                                                Thủ Đức,--%>
-                        <%--                                                <br>--%>
-                        <%--                                                Thành phố HCM.--%>
-                        <%--                                            </td>--%>
-                        <%--                                            <td class="text-right">--%>
-                        <%--                                                <a class="btn btn-info g6" href="#">Sửa</a>--%>
-                        <%--                                                <a class="btn btn-danger g6" href="#">Xóa</a>--%>
-                        <%--                                            </td>--%>
-                        <%--                                        </tr>--%>
-                        <%--                                    </table>--%>
-                        <%--                                    <div class="buttons clearfix">--%>
-                        <%--                                        <div class="pull-left">--%>
-                        <%--                                            <a class="btn btn-default ce5" href="#">Trở lại</a>--%>
-                        <%--                                        </div>--%>
-                        <%--                                        <div class="pull-right">--%>
-                        <%--                                            <input class="btn btn-primary ce5" type="submit" value="Tiếp tục">--%>
-                        <%--                                        </div>--%>
-                        <%--                                    </div>--%>
-                        <%--                                </div>--%>
-                        <%--                            </div>--%>
-                        <%--                        </div>--%>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                       href="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">Cập nhật
+                                        chữ ký <i class="fa fa-caret-down"></i></a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                 aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">
+                                <div class="row">
+                                    <div class="easy2">
+                                        <h2>Cập nhật chữ ký</h2>
+                                        <form class="form-horizontal" method="post"
+                                              action="my-account" enctype="multipart/form-data">
+                                            <input type="hidden" name="type" value="updateSign">
+                                            <fieldset>
+                                                <legend>Cập nhật chữ ký</legend>
+                                                <div class="form-group required">
+                                                    <label class="col-sm-2 control-label">Chọn chữ ký</label>
+                                                    <div class="col-sm-10">
+                                                        <input id="sign" class="form-control" type="file"
+                                                               name="sign">
+                                                    </div>
+                                                    <p class="form-error" style="color: red; margin-left: 200px"></p>
+                                                </div>
+                                            </fieldset>
+                                            <div class="buttons clearfix">
+                                                <div class="pull-right">
+                                                    <input class="btn btn-primary ce5" type="submit" value="Xác nhận">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

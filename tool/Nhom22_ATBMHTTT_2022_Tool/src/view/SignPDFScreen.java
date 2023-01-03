@@ -21,15 +21,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-
-import org.jpedal.examples.viewer.Commands;
-import org.jpedal.examples.viewer.Viewer;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import services.SignFileService;
-import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class SignPDFScreen extends JPanel {
 	private JLabel lblNewLabel;
