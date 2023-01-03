@@ -50,6 +50,27 @@ public class OrderDao {
         return order;
     }
 
+    public static Order findOneByAccountAndStatus(Account account, Status status) {
+        Connection connection = Connect.getInstance().getConnection();
+        Order order = null;
+        try {
+            String query = "SELECT * FROM orders WHERE ACCOUNT_ID = ? AND STATUS_ID = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, account.getId());
+            preparedStatement.setLong(2, status.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                order = OrderMapper.mapRow(resultSet);
+                break;
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return order;
+    }
+
     public static Order findOneById(long id) {
         Connection connection = Connect.getInstance().getConnection();
         Order order = null;

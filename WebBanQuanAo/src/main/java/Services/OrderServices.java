@@ -14,6 +14,10 @@ public class OrderServices {
         return orderId;
     }
 
+    public static Order getOrderByAccountAndStatus(Account account, Status status) {
+        return OrderDao.findOneByAccountAndStatus(account, status);
+    }
+
     public static long add(Account account, Cart cart, String recipient, String phone, String address) {
         Order order = new Order();
         order.setAccount(account);
@@ -47,8 +51,8 @@ public class OrderServices {
         return OrderDao.delete(id);
     }
 
-    public static boolean updateStatus(long id, String status) {
-        return false;
+    public static boolean updateStatus(Order order) {
+        return OrderDao.update(order);
     }
 
 }
