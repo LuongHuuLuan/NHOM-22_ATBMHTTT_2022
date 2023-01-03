@@ -227,14 +227,14 @@ public class SignPDFScreen extends JPanel {
 //        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
 //        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx"));
 //        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
-		fileChooser.setAcceptAllFileFilterUsed(false);
+//		fileChooser.setAcceptAllFileFilterUsed(false);
 		FileNameExtensionFilter pdf = new FileNameExtensionFilter("PDF Documents", "pdf");
 		FileNameExtensionFilter ms = new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx");
 		FileNameExtensionFilter img = new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp");
 		fileChooser.addChoosableFileFilter(pdf);
 		fileChooser.addChoosableFileFilter(ms);
 		fileChooser.addChoosableFileFilter(img);
-//        fileChooser.setAcceptAllFileFilterUsed(true);
+        fileChooser.setAcceptAllFileFilterUsed(true);
 		fileChooser.showOpenDialog(this);
 		try {
 			File file = fileChooser.getSelectedFile();
