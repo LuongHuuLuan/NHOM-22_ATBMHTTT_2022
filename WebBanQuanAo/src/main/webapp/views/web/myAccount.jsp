@@ -91,6 +91,26 @@
                                 <div class="row">
                                     <%--start account information--%>
                                     <div class="easy2">
+                                        <c:if test="${requestScope.linkDownKey !=null}">
+                                        <label class="col-md-9 control-label">
+                                            <h3 style="text-align: left">
+                                                Chữ ký đã được cập nhật
+                                                tải và
+                                                giữ cẩn thận, Lưu ý chữ ký chỉ cấp 1 lần, nếu muốn cấp lại phải câp
+                                                nhật
+                                            </h3>
+                                        </label>
+                                        <div class="col-md-3">
+                                            <a href="${requestScope.linkDownKey}"
+                                               download="yourKey.json">
+                                                <button class="btn btn-primary ce5"
+                                                >Tải xuống
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    </c:if>
+                                    <div class="easy2">
                                         <h2>Thông tin tài khoản</h2>
                                         <form id="update-account-form" class="form-horizontal" method="post"
                                               action="/WebBanQuanAo/my-account">
@@ -230,20 +250,34 @@
                                         <form class="form-horizontal" method="post"
                                               action="my-account" enctype="multipart/form-data">
                                             <input type="hidden" name="type" value="updateSign">
+                                            <input type="hidden" name="signDown" id="#signDown">
                                             <fieldset>
-                                                <legend>Cập nhật chữ ký</legend>
+                                                <%--                                                <legend>Cập nhật chữ ký</legend>--%>
+                                                <%--                                                <div class="form-group required">--%>
+                                                <%--                                                    <label class="col-sm-2 control-label">Chọn chữ ký</label>--%>
+                                                <%--                                                    <div class="col-sm-10">--%>
+                                                <%--                                                        <input id="sign" class="form-control" type="file"--%>
+                                                <%--                                                               name="sign">--%>
+                                                <%--                                                    </div>--%>
+                                                <%--                                                    <p class="form-error" style="color: red; margin-left: 200px"></p>--%>
+                                                <%--                                                </div>--%>
                                                 <div class="form-group required">
-                                                    <label class="col-sm-2 control-label">Chọn chữ ký</label>
-                                                    <div class="col-sm-10">
-                                                        <input id="sign" class="form-control" type="file"
-                                                               name="sign">
-                                                    </div>
-                                                    <p class="form-error" style="color: red; margin-left: 200px"></p>
                                                 </div>
                                             </fieldset>
                                             <div class="buttons clearfix">
                                                 <div class="pull-right">
-                                                    <input class="btn btn-primary ce5" type="submit" value="Xác nhận">
+                                                    <a>
+                                                        <button type="submit" class="btn btn-primary ce5"
+                                                                onclick="updateSign()"
+                                                        >Cập nhật chữ ký mới
+                                                        </button>
+                                                    </a>
+                                                    <a>
+                                                        <button type="submit" class="btn btn-primary ce5"
+                                                                onclick="downloadSign()"
+                                                        >Tải chữ ký
+                                                        </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </form>
@@ -251,7 +285,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -271,6 +304,14 @@
             });
         }
     })
+
+    function updateSign() {
+        $("#signDown").val("update")
+    }
+
+    function downloadSign() {
+        $("#signDown").val("download")
+    }
 
     function update(e) {
         e.preventDefault();

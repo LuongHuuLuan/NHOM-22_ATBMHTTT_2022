@@ -5,6 +5,8 @@ import Services.LoginService;
 import Services.SignService;
 import model.Account;
 import model.Sign;
+import org.json.JSONObject;
+import util.Key;
 import util.MySignature;
 
 import javax.servlet.RequestDispatcher;
@@ -12,8 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Base64;
 import java.util.UUID;
 
 @WebServlet(name = "myAccountController", value = "/my-account")
@@ -64,33 +69,74 @@ public class MyAccountController extends HttpServlet {
                     }
                 }
             } else if (type.equals("updateSign")) {
-                Part part = request.getPart("sign");
-                String readPath = request.getServletContext().getRealPath("/orders/upload");
-                String fileName = UUID.randomUUID().toString() + ".json";
-                File folder = new File(readPath);
-                if (!folder.exists()) {
-                    folder.mkdir();
-                }
-                part.write(readPath + "/" + fileName);
-                MySignature mySignature = new MySignature(readPath + "/" + fileName);
-                Sign sign = SignService.getSignWithAccountAndIsActive(account, true);
-                if (sign != null) {
-                    sign.setActive(false);
-                    SignService.update(sign);
-                    sign.setSign(mySignature.getPublicKey());
-                    sign.setKeySize(mySignature.getKeySize());
-                    sign.setActive(true);
-                    SignService.add(sign);
+//                Part part = request.getPart("sign");
+//                String readPath = request.getServletContext().getRealPath("/orders/upload");
+//                String fileName = UUID.randomUUID().toString() + ".json";
+//                File folder = new File(readPath);
+//                if (!folder.exists()) {
+//                    folder.mkdir();
+//                }
+//                part.write(readPath + "/" + fileName);
+//                MySignature mySignature = new MySignature(readPath + "/" + fileName);
+//                Sign sign = SignService.getSignWithAccountAndIsActive(account, true);
+//                if (sign != null) {
+//                    sign.setActive(false);
+//                    SignService.update(sign);
+//                    sign.setSign(mySignature.getPublicKey());
+//                    sign.setKeySize(mySignature.getKeySize());
+//                    sign.setActive(true);
+//                    SignService.add(sign);
+//                } else {
+//                    sign = new Sign();
+//                    sign.setAccount(account);
+//                    sign.setSign(mySignature.getPublicKey());
+//                    sign.setKeySize(mySignature.getKeySize());
+//                    sign.setActive(true);
+//                    SignService.add(sign);
+//                }
+//                mySignature.delete();
+                String func = request.getParameter("signDown");
+                if (func.equals("update")) {
+
                 } else {
-                    sign = new Sign();
-                    sign.setAccount(account);
-                    sign.setSign(mySignature.getPublicKey());
-                    sign.setKeySize(mySignature.getKeySize());
-                    sign.setActive(true);
-                    SignService.add(sign);
+                    Sign sign = SignService.getSignWithAccountAndIsActive(account, true);
+                    if (sign != null) {
+                        request.setAttribute("message", "Bạn đã có chữ ký");
+                    } else {
+                        Key key = new Key();
+                        key.generatorKey(1024);
+                        PublicKey publicKey = key.getPub();
+                        String keyBase64 = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+                        sign = new Sign();
+                        sign.setAccount(account);
+                        sign.setSign(keyBase64);
+                        sign.setKeySize(1024);
+                        sign.setActive(true);
+                        SignService.add(sign);
+
+                        PrivateKey privateKey = key.getPri();
+                        String privateKeyBase64 = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+                        JSONObject json = new JSONObject();
+                        json.put("userName", account.getUsername());
+                        json.put("email", account.getEmail());
+                        json.put("phone", account.getPhone());
+                        json.put("privateKey", privateKeyBase64);
+                        json.put("keySize", 1024);
+
+                        String signUrl = request.getServletContext().getRealPath("\\sign");
+                        File f = new File(signUrl);
+                        if (!f.exists()) {
+                            f.mkdir();
+                        }
+                        String uuid = UUID.randomUUID().toString().substring(0, 6);
+                        PrintWriter printWriter = new PrintWriter(signUrl + "\\" + uuid + ".json");
+                        printWriter.write(json.toString());
+                        printWriter.close();
+
+                        String linkDownKey = "/WebBanQuanAo/sign/" + uuid + ".json";
+                        request.setAttribute("linkDownKey", linkDownKey);
+                    }
                 }
-                mySignature.delete();
-                request.setAttribute("message", "Đã cập nhật chữ ký");
             }
         } else {
             request.setAttribute("message", "Vui lòng đăng nhập");
