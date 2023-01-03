@@ -78,11 +78,12 @@ public class MyAccountController extends HttpServlet {
                 if (sign != null) {
                     Part privateKeyPart = request.getPart("privateKey");
                     Part publicKeyPart = request.getPart("publicKey");
-                    PartKey partPrivateKey = new PartKey(privateKeyPart, "privateKey");
-                    PartKey partPublicKey = new PartKey(publicKeyPart, "publicKey");
 
                     RSA rsa = null;
                     try {
+                        PartKey partPrivateKey = new PartKey(privateKeyPart, "privateKey");
+                        PartKey partPublicKey = new PartKey(publicKeyPart, "publicKey");
+
                         byte[] keyBytes = Base64.getDecoder().decode(sign.getSign());
                         X509EncodedKeySpec ks = new X509EncodedKeySpec(keyBytes);
                         KeyFactory kf = KeyFactory.getInstance("RSA");

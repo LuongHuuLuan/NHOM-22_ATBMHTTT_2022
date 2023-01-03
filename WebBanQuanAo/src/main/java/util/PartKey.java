@@ -23,46 +23,38 @@ public class PartKey {
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
-    public PartKey(Part part, String keyType) {
+    public PartKey(Part part, String keyType) throws Exception {
         this.part = part;
         this.keyType = keyType;
         this.convertKey();
     }
 
-    private void convertKey() {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(this.part.getInputStream()));
-            String line = reader.readLine();
-            String content = "";
-            while (line != null) {
-                content += line;
-                line = reader.readLine();
-            }
-            this.part.getInputStream().close();
-            reader.close();
-            JSONObject jsonObject = new JSONObject(content);
+    private void convertKey() throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(this.part.getInputStream()));
+        String line = reader.readLine();
+        String content = "";
+        while (line != null) {
+            content += line;
+            line = reader.readLine();
+        }
+        this.part.getInputStream().close();
+        reader.close();
+        JSONObject jsonObject = new JSONObject(content);
 
-            if (this.keyType.equals("publicKey")) {
-                String key = jsonObject.getString("publicKey");
-                this.StringKey = key;
-                byte[] keyBytes = Base64.getDecoder().decode(key);
-                X509EncodedKeySpec ks = new X509EncodedKeySpec(keyBytes);
-                KeyFactory kf = KeyFactory.getInstance("RSA");
-                this.publicKey = kf.generatePublic(ks);
-            } else {
-                String key = jsonObject.getString("privateKey");
-                this.StringKey = key;
-                byte[] keyBytes = Base64.getDecoder().decode(key);
-                PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(keyBytes);
-                KeyFactory kf = KeyFactory.getInstance("RSA");
-                this.privateKey = kf.generatePrivate(ks);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+        if (this.keyType.equals("publicKey")) {
+            String key = jsonObject.getString("publicKey");
+            this.StringKey = key;
+            byte[] keyBytes = Base64.getDecoder().decode(key);
+            X509EncodedKeySpec ks = new X509EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            this.publicKey = kf.generatePublic(ks);
+        } else {
+            String key = jsonObject.getString("privateKey");
+            this.StringKey = key;
+            byte[] keyBytes = Base64.getDecoder().decode(key);
+            PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            this.privateKey = kf.generatePrivate(ks);
         }
     }
 

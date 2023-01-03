@@ -89,6 +89,8 @@ public class SignController extends HttpServlet {
                     Order order = OrderServices.getOrder(orderId);
                     order.setStatus(StatusService.getStatusByName("VERIFY"));
                     OrderServices.updateStatus(order);
+                    cart = CartService.getCart(account);
+                    session.setAttribute("cart", cart);
                     message = "Thanh toán thành công";
                 } else {
                     message = "Thanh toán thất bại chữ ký không đúng";
