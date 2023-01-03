@@ -1,10 +1,8 @@
 package controller.web;
 
 import Services.*;
-import model.Account;
-import model.Cart;
-import model.Sign;
-import model.Verification;
+import model.*;
+import util.FileUtil;
 import util.VerifySign;
 
 import javax.servlet.RequestDispatcher;
@@ -25,16 +23,29 @@ public class SignController extends HttpServlet {
         Cart cart = (Cart) session.getAttribute("cart");
 
         long orderId = Long.parseLong(request.getParameter("id"));
-        String base = request.getServletContext().getContextPath();
-        String orderUrl = base + "\\orders\\download\\order-" + orderId + ".pdf";
-
-        request.setAttribute("orderId", orderId);
-        request.setAttribute("fileName", "order-" + orderId + ".pdf");
-        request.setAttribute("orderUrl", orderUrl);
-        request.setAttribute("totalCart", CartService.totalCart(cart));
-        request.setAttribute("pageName", "Ký hóa đơn");
-        RequestDispatcher rd = request.getRequestDispatcher("/views/web/sign.jsp");
-        rd.forward(request, response);
+        Order order = OrderServices.getOrder(orderId);
+        if (order.getStatus().getName().equals("WAIT")) {
+            String base = request.getServletContext().getContextPath();
+            String orderUrl = base + "\\orders\\download\\order-" + orderId + ".pdf";
+            request.setAttribute("orderId", orderId);
+            request.setAttribute("fileName", "order-" + orderId + ".pdf");
+            request.setAttribute("orderUrl", orderUrl);
+            request.setAttribute("totalCart", CartService.totalCart(cart));
+            request.setAttribute("pageName", "Ký hóa đơn");
+            RequestDispatcher rd = request.getRequestDispatcher("/views/web/sign.jsp");
+            rd.forward(request, response);
+        } else {
+            String message = "";
+            if (order.getStatus().getName().equals("CANCEL")) {
+                message = "Hóa đơn không tồn tại";
+            } else {
+                message = "Hóa đơn đã được ký";
+            }
+            request.setAttribute("message", message);
+            request.setAttribute("pageName", "Thông báo");
+            RequestDispatcher rd = request.getRequestDispatcher("/views/web/notification.jsp");
+            rd.forward(request, response);
+        }
     }
 
     @Override
@@ -59,6 +70,9 @@ public class SignController extends HttpServlet {
             if (!folder.exists()) {
                 folder.mkdir();
             }
+            orderPdf.write(readPath + "/" + fileName);
+            FileUtil.copyFile(readPath + "/" + fileName, "E:\\GocHocTap\\intellij\\Antoanbaomathttt\\WebBanQuanAo\\src\\main\\webapp\\orders\\upload\\order-" + orderId + ".pdf", false);
+
             String orderNoSignUrl = request.getServletContext().getRealPath("/orders/download/order-" + orderId + ".pdf");
             String orderSignUrl = readPath + "/" + fileName;
 
@@ -71,6 +85,9 @@ public class SignController extends HttpServlet {
                 verification.setOK(true);
                 VerificationService.add(verification);
                 CartService.clear(cart);
+                Order order = OrderServices.getOrder(orderId);
+                order.setStatus(StatusService.getStatusByName("VERIFY"));
+                OrderServices.updateStatus(order);
                 message = "Thanh toán thành công";
             } else {
                 message = "Thanh toán thất bại chữ ký không đúng";

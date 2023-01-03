@@ -39,7 +39,9 @@
                                 </div>
                                 <div>
                                     <div class="tb-beg">
-                                        <a href='<c:url value="/single-product?productId=${item.product.code}"/>'>${item.product.name}</a>
+                                        <a href='<c:url value="/single-product?productId=${item.product.code}"/>'>${item.product.name}
+                                            <br>
+                                            <span>màu: ${item.color.name.toLowerCase()}, size: ${item.size.code}</span></a>
                                     </div>
                                 </div>
                                 <div>
