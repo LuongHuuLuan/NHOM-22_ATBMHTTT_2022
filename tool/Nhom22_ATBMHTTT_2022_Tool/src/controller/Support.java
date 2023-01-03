@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.json.JSONException;
@@ -30,6 +31,11 @@ public class Support {
 
 		if (com.equals("Khởi tạo file chữ kí")) {
 			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+	        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx"));
+	        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
+	 
+	        fileChooser.setAcceptAllFileFilterUsed(true);
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int option = fileChooser.showSaveDialog(frame);
 			if (option == JFileChooser.APPROVE_OPTION) {
@@ -38,6 +44,10 @@ public class Support {
 						Constants.PUBLIC_KEY, keySize);
 				save(file.getAbsolutePath() + "\\" + "PrivateKeyAndDigitalSignature.json", userName, email, phone, pri,
 						Constants.PRIVATE_KEY, keySize);
+				JOptionPane.showMessageDialog(frame,
+		                "Lưu file thành công tại thư mục: " + file.getAbsolutePath(),
+		                "Thành công",
+		                JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else {
 			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());

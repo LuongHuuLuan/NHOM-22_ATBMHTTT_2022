@@ -53,7 +53,7 @@ public class VerificationDao {
     }
 
     public static int add(Verification verification) {
-        String sql = "INSERT INTO sign(ORDER_ID, HASH_VALUE, SIGN_ID, IS_OK) VALUES(?, ?, ?, ?);";
+        String sql = "INSERT INTO verification(ORDER_ID, HASH_VALUE, SIGN_ID, IS_OK) VALUES(?, ?, ?, ?);";
         Connection connection = Connect.getInstance().getConnection();
         int id = -1;
         try {

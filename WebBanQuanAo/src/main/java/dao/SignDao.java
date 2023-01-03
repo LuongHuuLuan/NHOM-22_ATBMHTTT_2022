@@ -72,7 +72,7 @@ public class SignDao {
     }
 
     public static int add(Sign sign) {
-        String sql = "INSERT INTO sign(ACCOUNT_ID, SIGN, IS_ACTIVE) VALUES(?, ?, ?);";
+        String sql = "INSERT INTO sign(ACCOUNT_ID, SIGN, KEY_SIZE, IS_ACTIVE) VALUES(?, ?, ?, ?);";
         Connection connection = Connect.getInstance().getConnection();
         int id = -1;
         try {
@@ -80,7 +80,8 @@ public class SignDao {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, sign.getAccount().getId());
             preparedStatement.setString(2, sign.getSign());
-            preparedStatement.setBoolean(3, sign.isActive());
+            preparedStatement.setInt(3, sign.getKeySize());
+            preparedStatement.setBoolean(4, sign.isActive());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -111,13 +112,14 @@ public class SignDao {
     }
 
     public static boolean update(Sign sign) {
-        String sql = "UPDATE sign SET SIGN = ?, IS_ACTIVE = ?  WHERE ID = ?";
+        String sql = "UPDATE sign SET SIGN = ?, KEY_SIZE = ?, IS_ACTIVE = ?  WHERE ID = ?";
         Connection connection = Connect.getInstance().getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, sign.getSign());
-            preparedStatement.setBoolean(2, sign.isActive());
-            preparedStatement.setLong(3, sign.getId());
+            preparedStatement.setInt(2, sign.getKeySize());
+            preparedStatement.setBoolean(3, sign.isActive());
+            preparedStatement.setLong(4, sign.getId());
             int resultSet = preparedStatement.executeUpdate();
             preparedStatement.close();
             return resultSet != -1;

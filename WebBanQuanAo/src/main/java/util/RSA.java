@@ -1,12 +1,8 @@
-package controller;
+package util;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -23,11 +19,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.JTextArea;
-
-import org.json.JSONObject;
-
-import heppers.Constants;
-
 public class RSA {
 	private Cipher cipher;
 	// Long add more 1 line
@@ -94,13 +85,12 @@ public class RSA {
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(temp);
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] buffered = generateByteBuffer(Constants.DECRYPT, keySize);
-		System.out.println(buffered.length);
 		try {
 			while (byteArrayInputStream.read(buffered) != -1) {
 				byteArrayOutputStream.write(cipher.doFinal(buffered));
 			}
-			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
-//			return new String(byteArrayOutputStream.toByteArray());
+//			return new String(Base64.getEncoder().encode(byteArrayOutputStream.toByteArray()));
+			return new String(byteArrayOutputStream.toByteArray());
 		} catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
 			e.printStackTrace();
 			return "Error";
@@ -156,39 +146,5 @@ public class RSA {
 		} else {
 			return new byte[keySize == 512 ? 64 : keySize == 1024 ? 128 : keySize == 2048 ? 256 : 512];
 		}
-	}
-
-	// done
-	public static void main(String[] args) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException,
-			InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
-		String s = "GSR+4XmQ49182NF1t5Eo1XRjgU3m6WYGZp8tVkAVTAzyUPbz4LSzb+2lGiu6MwwkggW9hPh03+YUfBFdKZgauYsk78Iq/yridI7Z9tX47AA+rlnXjQgQm2+eQDy9e/PB15vxZ5Q04VZ/XXT0ohSdPehcAmW3R1HMVDKzuoL4K/Q=";
-		BufferedReader bufferedReader = new BufferedReader(
-				new FileReader("D:\\test\\PublicKeyAndDigitalSignature.json"));
-		String jsonString = "";
-		String line = "";
-		while ((line = bufferedReader.readLine()) != null) {
-			jsonString += line;
-		}
-		bufferedReader.close();
-		// load JSON
-		JSONObject jsonObject = new JSONObject(jsonString);
-		// get value of key "privateKey"
-		String publicKeyString = (String) jsonObject.get("publicKey");
-		// convert from string to private key
-		byte[] publicBytes = Base64.getDecoder().decode(publicKeyString.trim());
-//		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(publicBytes);
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
-		PublicKey publicKey = KeyFactory.getInstance(Constants.RSA).generatePublic(keySpec);
-		String s1 = Hash.getIntance(Constants.SHA_256).hashFile("D:\\test\\1.pdf");
-		String s2 = RSA.getInstance().decrypt(s, Constants.PUBLIC_KEY, publicKey, 512);
-//		s1= Base64.getEncoder().encodeToString(s1.getBytes(StandardCharsets.UTF_8));
-		System.out.println(s1);
-		System.out.println(s2);
-		boolean sArray  = s1.startsWith(s1);//solve to check compare hashing after decrypt
-		boolean sArray2 = s1.endsWith(s1);
-//		for (String string : sArray) {
-//			System.out.println(string);
-//		}
-		System.out.println(sArray);
 	}
 }
