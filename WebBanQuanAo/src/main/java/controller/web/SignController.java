@@ -76,21 +76,25 @@ public class SignController extends HttpServlet {
             String orderNoSignUrl = request.getServletContext().getRealPath("/orders/download/order-" + orderId + ".pdf");
             String orderSignUrl = readPath + "/" + fileName;
 
-            VerifySign verifySign = new VerifySign(orderNoSignUrl, orderSignUrl, sign);
-            if (verifySign.isValid()) {
-                Verification verification = new Verification();
-                verification.setOrder(OrderServices.getOrder(orderId));
-                verification.setHashValue(verifySign.getHashOrderNoSign());
-                verification.setSign(sign);
-                verification.setOK(true);
-                VerificationService.add(verification);
-                CartService.clear(cart);
-                Order order = OrderServices.getOrder(orderId);
-                order.setStatus(StatusService.getStatusByName("VERIFY"));
-                OrderServices.updateStatus(order);
-                message = "Thanh toán thành công";
-            } else {
-                message = "Thanh toán thất bại chữ ký không đúng";
+            try {
+                VerifySign verifySign = new VerifySign(orderNoSignUrl, orderSignUrl, sign);
+                if (verifySign.isValid()) {
+                    Verification verification = new Verification();
+                    verification.setOrder(OrderServices.getOrder(orderId));
+                    verification.setHashValue(verifySign.getHashOrderNoSign());
+                    verification.setSign(sign);
+                    verification.setOK(true);
+                    VerificationService.add(verification);
+                    CartService.clear(cart);
+                    Order order = OrderServices.getOrder(orderId);
+                    order.setStatus(StatusService.getStatusByName("VERIFY"));
+                    OrderServices.updateStatus(order);
+                    message = "Thanh toán thành công";
+                } else {
+                    message = "Thanh toán thất bại chữ ký không đúng";
+                }
+            } catch (Exception e) {
+                message = "Chữ ký sai không thể xác thực";
             }
         }
         request.setAttribute("message", message);

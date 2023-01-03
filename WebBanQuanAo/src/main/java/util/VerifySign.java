@@ -21,7 +21,7 @@ public class VerifySign {
     private String jsonSign;
     private Sign sign;
 
-    public VerifySign(String orderNoSignUrl, String orderSignUrl, Sign sign) {
+    public VerifySign(String orderNoSignUrl, String orderSignUrl, Sign sign) throws Exception {
         this.orderNoSignUrl = orderNoSignUrl;
         this.orderSignUrl = orderSignUrl;
         this.sign = sign;
@@ -32,30 +32,26 @@ public class VerifySign {
         return Hash.getIntance(Constants.SHA_256).hashFile(orderNoSignUrl);
     }
 
-    private String readJsonSign() {
+    private String readJsonSign() throws Exception {
         // Create a new PDF document.
         String content = "";
-        try {
-            PdfDocument pdf = new PdfDocument();
-            // Load the file from disk.
-            pdf.loadFromFile(orderSignUrl);
-            // Get a collection of attachments on the PDF document.
-            PdfAttachmentCollection collection = pdf.getAttachments();
-            // Save all the attachments to the files.
-            String fileName = collection.get(0).getFileName();
-            File file = new File(fileName);
-            ByteArrayInputStream bais = new ByteArrayInputStream(collection.get(0).getData());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(bais));
+        PdfDocument pdf = new PdfDocument();
+        // Load the file from disk.
+        pdf.loadFromFile(orderSignUrl);
+        // Get a collection of attachments on the PDF document.
+        PdfAttachmentCollection collection = pdf.getAttachments();
+        // Save all the attachments to the files.
+        String fileName = collection.get(0).getFileName();
+        File file = new File(fileName);
+        ByteArrayInputStream bais = new ByteArrayInputStream(collection.get(0).getData());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(bais));
 
-            String line = reader.readLine();
-            while (line != null) {
-                content += line;
-                line = reader.readLine();
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String line = reader.readLine();
+        while (line != null) {
+            content += line;
+            line = reader.readLine();
         }
+        reader.close();
         return content;
     }
 
@@ -64,32 +60,18 @@ public class VerifySign {
         return jsonObject.getString("billEncrypt");
     }
 
-    public String getHashOrderSign() {
+    public String getHashOrderSign() throws Exception {
         String decryptHash = "";
-        try {
-            String sign = getSign();
-            byte[] keyBytes = Base64.getDecoder().decode(this.sign.getSign());
-            X509EncodedKeySpec ks = new X509EncodedKeySpec(keyBytes);
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            PublicKey pk = kf.generatePublic(ks);
-            decryptHash = RSA.getInstance().decrypt(sign, Constants.PUBLIC_KEY, pk, this.sign.getKeySize());
-        } catch (IllegalBlockSizeException e) {
-            throw new RuntimeException(e);
-        } catch (BadPaddingException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        }
+        String sign = getSign();
+        byte[] keyBytes = Base64.getDecoder().decode(this.sign.getSign());
+        X509EncodedKeySpec ks = new X509EncodedKeySpec(keyBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        PublicKey pk = kf.generatePublic(ks);
+        decryptHash = RSA.getInstance().decrypt(sign, Constants.PUBLIC_KEY, pk, this.sign.getKeySize());
         return decryptHash;
     }
 
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         String hashNoSign = getHashOrderNoSign();
         String hashSign = getHashOrderSign();
         if (hashSign.startsWith(hashNoSign) || hashSign.endsWith(hashNoSign)) {

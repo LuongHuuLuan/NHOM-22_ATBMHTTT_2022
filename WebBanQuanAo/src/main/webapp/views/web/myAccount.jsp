@@ -48,6 +48,7 @@
             </div>
         </div>
 
+
         <div class="modal fade" id="modal-change-pass" tabindex="-1" role="dialog" aria-labelledby="modal-change-pass"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -65,6 +66,44 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="button" class="btn btn-primary" onclick="changePass()">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="update-sign" tabindex="-1" role="dialog" aria-labelledby="updateSignLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật chữ ký</h5>
+                        <button type="button" style="margin-top: -25px !important;" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="update-sign-form" enctype="multipart/form-data" action="my-account" method="post">
+                            <input type="hidden" name="type" value="updateSign">
+                            <div class="form-group">
+                                <label for="update-privateKey">Hãy chọn khóa riêng tư cũ của bạn</label>
+                                <input type="file" class="form-control"
+                                       name="privateKey"
+                                       id="update-privateKey" accept="application/JSON">
+                                <p class="form-text text-danger text-muted form-error"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="update-privateKey">Hãy chọn khóa công khai mới của bạn</label>
+                                <input type="file" class="form-control"
+                                       name="publicKey"
+                                       id="update-publicKey" accept="application/JSON">
+                                <p class="form-text text-danger text-muted form-error"></p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary" form="update-sign-form">Cập nhật</button>
                     </div>
                 </div>
             </div>
@@ -249,8 +288,7 @@
                                         <h2>Cập nhật chữ ký</h2>
                                         <form class="form-horizontal" method="post"
                                               action="my-account" enctype="multipart/form-data">
-                                            <input type="hidden" name="type" value="updateSign">
-                                            <input type="hidden" name="signDown" id="#signDown">
+                                            <input type="hidden" name="type" value="download">
                                             <fieldset>
                                                 <%--                                                <legend>Cập nhật chữ ký</legend>--%>
                                                 <%--                                                <div class="form-group required">--%>
@@ -266,15 +304,12 @@
                                             </fieldset>
                                             <div class="buttons clearfix">
                                                 <div class="pull-right">
+                                                    <button type="submit" class="btn btn-primary ce5"
+                                                            onclick="updateSign(event)"
+                                                    >Cập nhật chữ ký mới
+                                                    </button>
                                                     <a>
                                                         <button type="submit" class="btn btn-primary ce5"
-                                                                onclick="updateSign()"
-                                                        >Cập nhật chữ ký mới
-                                                        </button>
-                                                    </a>
-                                                    <a>
-                                                        <button type="submit" class="btn btn-primary ce5"
-                                                                onclick="downloadSign()"
                                                         >Tải chữ ký
                                                         </button>
                                                     </a>
@@ -294,6 +329,18 @@
 <!-- my account content section end -->
 <script src='<c:url value="/assets/js/validation.js"/>'></script>
 <script>
+
+    Validator({
+        form: "#update-sign-form",
+        errorSelector: ".form-error",
+        formGroupSelector: ".form-group",
+        rules: [
+            Validator.isRequire("#update-privateKey", "Chưa chọn khóa riêng tư"),
+            Validator.isRequire("#update-publicKey", "Chưa chọn khóa công khai"),
+        ]
+    });
+
+
     $(document).ready(function () {
         let message = "${requestScope.message}";
         if (message === "") {
@@ -305,12 +352,10 @@
         }
     })
 
-    function updateSign() {
-        $("#signDown").val("update")
-    }
 
-    function downloadSign() {
-        $("#signDown").val("download")
+    function updateSign(e) {
+        e.preventDefault();
+        $("#update-sign").modal("show");
     }
 
     function update(e) {
