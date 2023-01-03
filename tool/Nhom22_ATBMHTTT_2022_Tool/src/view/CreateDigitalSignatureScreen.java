@@ -115,7 +115,7 @@ public class CreateDigitalSignatureScreen extends JPanel {
 
 		JComboBox comboBox = new JComboBox();
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "512", "1024", "2048", "4096" }));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "1024"}));
 		comboBox.setBounds(124, 36, 94, 27);
 		panel_1.add(comboBox);
 
