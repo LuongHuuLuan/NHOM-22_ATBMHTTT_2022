@@ -16,13 +16,15 @@ import java.text.DecimalFormat;
 import java.util.concurrent.Phaser;
 
 public class CreatePDFOrder {
+    private String filename;
     private String rootFolder;
     private Order order;
     private String orderUrl;
     private String fontUrl;
 
 
-    public CreatePDFOrder(String rootFolder, String orderUrl, String fontUrl, Order order) {
+    public CreatePDFOrder(String filename, Order order) {
+        this.filename = filename;
         this.rootFolder = rootFolder;
         this.orderUrl = orderUrl;
         this.fontUrl = fontUrl;
@@ -33,14 +35,20 @@ public class CreatePDFOrder {
         Document document = new Document();
 
         try {
-            FileOutputStream FOS = new FileOutputStream(this.orderUrl);
+            String fileUrl = rootFolder + "/orders/download/" + filename + ".pdf";
+            fileUrl = fileUrl.replace("/", "\\\\");
+            FileOutputStream FOS = new FileOutputStream(fileUrl.trim());
+//            FileOutputStream FOS = new FileOutputStream(this.orderUrl);
             // khởi tạo một PdfWriter truyền vào document và FileOutputStream
             PdfWriter.getInstance(document, FOS);
             // mở file để thực hiện viết
             document.open();
             // thêm nội dung sử dụng add function
 
-            BaseFont baseFont = BaseFont.createFont(this.fontUrl, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            String fontUrl = rootFolder + "/assets/fonts/ARIALUNI.TTF";
+            fontUrl = fontUrl.replace("/", "\\\\");
+            BaseFont baseFont = BaseFont.createFont(fontUrl.trim(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+//            BaseFont baseFont = BaseFont.createFont(this.fontUrl, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font font = new Font(baseFont);
 
             Paragraph title = new Paragraph("Thông tin hóa đơn của bạn", font);
@@ -104,7 +112,8 @@ public class CreatePDFOrder {
 
             // đóng file
             document.close();
-            FileUtil.copyFile(orderUrl, "E:\\GocHocTap\\intellij\\Antoanbaomathttt\\WebBanQuanAo\\src\\main\\webapp\\orders\\download\\order-" + order.getId() + ".pdf", false);
+            FileUtil.copyFile(fileUrl, "E:\\GocHocTap\\intellij\\Antoanbaomathttt\\WebBanQuanAo\\src\\main\\webapp\\orders\\download\\" + filename + ".pdf", false);
+//            FileUtil.copyFile(orderUrl, "E:\\GocHocTap\\intellij\\Antoanbaomathttt\\WebBanQuanAo\\src\\main\\webapp\\orders\\download\\order-" + order.getId() + ".pdf", false);
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -114,6 +123,24 @@ public class CreatePDFOrder {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public String getRootFolder() {
+        return rootFolder;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public void setRootFolder(String rootFolder) {
+        rootFolder = rootFolder.replace("\\", "/");
+        rootFolder = rootFolder.substring(0, rootFolder.lastIndexOf("/WebBanQuanAo"));
+        this.rootFolder = rootFolder;
     }
 
     public String getOrderUrl() {

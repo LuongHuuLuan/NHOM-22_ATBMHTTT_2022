@@ -56,7 +56,9 @@ public class CheckoutController extends HttpServlet {
             }
             long orderId = OrderServices.add(account, cart, recipient, phone, address);
             order = OrderServices.getOrder(orderId);
-            CreatePDFOrder createPDFOrder = new CreatePDFOrder(request.getServletContext().getRealPath("/"), request.getServletContext().getRealPath("/orders/download/order-" + order.getId() + ".pdf"), request.getServletContext().getRealPath("/assets/fonts/ARIALUNI.TTF"), order);
+            CreatePDFOrder createPDFOrder = new CreatePDFOrder("order-" + orderId, order);
+            createPDFOrder.setRootFolder(request.getServletContext().getRealPath(base));
+//            CreatePDFOrder createPDFOrder = new CreatePDFOrder(request.getServletContext().getRealPath("/"), request.getServletContext().getRealPath("/orders/download/order-" + order.getId() + ".pdf"), request.getServletContext().getRealPath("/assets/fonts/ARIALUNI.TTF"), order);
             createPDFOrder.createPdf();
             response.sendRedirect("sign?id=" + orderId);
         }
